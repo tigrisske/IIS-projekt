@@ -23,4 +23,13 @@ class Event extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    /*
+     * Get the users registerdd for the event.
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
 }
