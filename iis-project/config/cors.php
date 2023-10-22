@@ -16,6 +16,10 @@ return [
     */
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    //added by joker
+    'supports_credentials' => true,
+    //(hento hore)
+
 
     'allowed_methods' => ['*'],
 
