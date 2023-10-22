@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone_number')->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->boolean('is_moderator')->default(false);
+            $table->integer('autohority_level')->default(0);
         });
     }
 
