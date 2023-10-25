@@ -43,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the events tha the user is registered for.
+     */
+    public function events()
+    {
+        return $this->belongsToMany(Event::class);
+    }
 }
