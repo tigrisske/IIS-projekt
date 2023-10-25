@@ -4,6 +4,7 @@ import axiosClient from '../axios-client';
 
 const SignUp = () => {
     const nameRef = useRef();
+    const lastNameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
@@ -12,7 +13,8 @@ const SignUp = () => {
         event.preventDefault();
         try {
             const request = {
-                name: nameRef.current.value,
+                first_name: nameRef.current.value,
+                last_name: lastNameRef.current.value,
                 email: emailRef.current.value,
                 password: passwordRef.current.value,
                 password_confirmation: passwordConfirmationRef.current.value,
@@ -37,6 +39,13 @@ const SignUp = () => {
                 placeholder="Name"
                 // value={credentials.name}
                 // onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
+            />
+            <input
+                type="text"
+                ref={lastNameRef}
+                placeholder="last name"
+                // value={credentials.password}
+                // onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
             />
             <input
                 type="email"
