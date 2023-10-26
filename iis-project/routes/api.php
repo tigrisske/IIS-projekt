@@ -7,6 +7,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ImageController;
+
 
 
 /*
@@ -30,7 +34,9 @@ Route::middleware(['web'])->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
     Route::post('/auth', [AuthController::class,'auth']);
     Route::get('/user', [UserController::class,'getUser']);
-    Route::get('/events', [EventController::class,'getEvents']);
+
+    Route::get('/events', [EventController::class,'show']);
+    Route::get('/events/count', [EventController::class,'get_num_events']);
     Route::post('/createevent', [EventController::class,'create']);
     Route::post('/createlocation', [LocationController::class,'create']);
     Route::post('/createcategory', [CategoryController::class,'create']);

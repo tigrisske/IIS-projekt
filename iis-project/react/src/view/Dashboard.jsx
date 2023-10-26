@@ -51,7 +51,7 @@ function create_category(){
         <div>
             <h1>DASHBOARD</h1>
             <button onClick={logout}>Logout</button>
-            <button onClick={user}>User settings</button>
+            <button onClick={user}>My profile</button>
             <button onClick={create_event}>Create Event</button>
             <button onClick={create_location}>Create Location</button>
             <button onClick={create_category}>Create Category</button>

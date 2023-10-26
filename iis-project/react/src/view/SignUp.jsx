@@ -1,10 +1,10 @@
-
 import React, { useState,useRef } from 'react';
 import axiosClient from '../axios-client';
 import {useStateContext} from "../components/Context.jsx";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
-
+    const navigate = useNavigate();
     const { setUser, setToken } = useStateContext()
     const nameRef = useRef();
     const lastNameRef = useRef();
@@ -24,6 +24,7 @@ const SignUp = () => {
             .then((response) => {
                 setToken('true');
                 console.log(response);
+                navigate('/dashboard');
             })
             .catch(error => {
                 console.log(error);
@@ -67,7 +68,7 @@ const SignUp = () => {
                 // value={credentials.passwordConfirm}
                 // onChange={(e) => setCredentials({ ...credentials, passwordConfirm: e.target.value })}
             />
-            <button onClick={handleSignIn}>Sign In</button>
+            <button onClick={handleSignIn} >Sign In</button>
         </div>
     );
 };

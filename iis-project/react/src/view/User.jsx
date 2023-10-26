@@ -2,23 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 
 const User = () => {
-  const [userData, setUserData] = useState(null); // State to store user data
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Fetch user data when the component mounts
     axiosClient.get('/user', { withCredentials: true })
       .then(response => {
         console.log("Data received:", response.data);
-        setUserData(response.data); // Store the user data in the state
+        setUserData(response.data);
       })
       .catch(error => {
         console.log("Error:", error);
       });
-  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+  }, [])
 
   return (
     <div>
-      {userData ? ( // Conditionally render the user data
+      {userData ? (
         <div>
           <div>
             <div>

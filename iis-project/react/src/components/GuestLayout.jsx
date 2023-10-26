@@ -18,7 +18,7 @@ export default function GuestLayout(){
           <header className="header">
             <GuestHeader/>
             </header>
-          <div className="form">
+          <div className="app-body">
             <Outlet />
           </div>
         </div>

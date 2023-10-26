@@ -28,9 +28,10 @@ const GuestHeader = () => {
 
   return (
     <div className="guest-header">
-      <li className="guesst-header"><a className="guests-header" href="/dashboard">Dashboard</a></li>
-      <li className="guesst-header"><a className="guest-sheader" href="/events">Events</a></li>
-      <li className="guesst-header"><a onClick={logout} href="/login">Logout  </a></li>
+      <p className="header-text"><a  href="/dashboard">Dashboard</a></p>
+      <p className="header-text"><a  href="/events">Events</a></p>
+      <p className="header-text"><a  href="/user">My profile  </a></p>
+      <p className="header-text"><a onClick={logout} href="/login">Logout  </a></p>
    </div>
   );
 };

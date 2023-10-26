@@ -12,11 +12,11 @@ export default function DefaultLayout(){
   }
 
     return (
-        <div>
+        <div className='main'>
             <header>
                 <Header/>
             </header>   
-            <aside>
+            <aside className='app-body'>
                 <Outlet/>
             </aside>
         </div>

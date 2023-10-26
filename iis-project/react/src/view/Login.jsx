@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axiosClient from '../axios-client';
 import { Navigate, useNavigate } from 'react-router-dom';
 import {useStateContext} from "../components/Context.jsx";
+import '../components/Main.css';
 
 
 const Login = () => {
@@ -44,8 +45,10 @@ const Login = () => {
                 value={credentials.password}
                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
             />
+            <div className='input'>
             <button onClick={handleSignIn}>Sign In</button>
             <button onClick={check}>Verify Login</button>
+            </div>
         </div>
     );
 };

@@ -29,7 +29,6 @@ const CreateEvent = () => {
                 console.log('toto je response ty coco');
                 console.log(response);
 
-                // Reset the input fields only if the creation is successful
                 nameRef.current.value = '';
                 startDateRef.current.value = '';
                 endDateRef.current.value = '';
@@ -39,7 +38,7 @@ const CreateEvent = () => {
                 locationIdRef.current.value = '';
                 isConfirmedRef.current.value = '';
             })
-            // Handle successful sign in response (store session id in cookies if needed)
+
             .catch(error => {
             console.log('toto je error ty coco');
             console.log(error); 

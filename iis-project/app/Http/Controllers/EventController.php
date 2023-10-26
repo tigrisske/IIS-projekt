@@ -43,13 +43,26 @@ class EventController extends Controller
     {
         //
     }
+    public function get_num_events()
+    {
+        $count = Event::count();
+        return response()->json(['count' => $count]);
+    }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Event $event , $page = 1)
     {
-        //
+
+        $events = Event::skip(($page - 1) * 4)->take(4)->get();
+        return response()->json(['events' => $events]);
+
+
+        // $events = Event::all();
+
+        // return response()->json(['events' => $events]);
     }
 
     /**

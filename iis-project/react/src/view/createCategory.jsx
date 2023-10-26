@@ -36,15 +36,11 @@ const CreateCategory = () => {
                 type="text"
                 ref={nameRef}
                 placeholder="Name"
-                // value={credentials.name}
-                // onChange={(e) => setCredentials({ ...credentials, name: e.target.value })}
             />
             <input
                 type="text"
                 ref={createdByRef}
                 placeholder="created by"
-                // value={credentials.password}
-                // onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
             />
             <button onClick={handleCreate}>Create</button>
         </div>

@@ -17,8 +17,8 @@ const GuestHeader = () => {
 
   return (
     <div className="guest-header">
-      <li className="guesst-header"><a className="guests-header" href="/login">Login</a></li>
-      <li className="guesst-header"><a className="guest-sheader" href="/signup">Register</a></li>
+      <p className="header-text"><a  href="/login">Login</a></p>
+      <p className="header-text"><a  href="/signup">Register</a></p>
    </div>
   );
 };
