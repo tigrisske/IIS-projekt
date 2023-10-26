@@ -18,9 +18,22 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = $request;//->validated();
+        $event = Event::create([
+            'name' => $data['name'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'], 
+            'capacity' => $data['capacity'], 
+            'description' => $data['description'], 
+            'category_id' => $data['category_id'], 
+            'location_id' => $data['location_id'], 
+            'is_confirmed' => $data['is_confirmed'], 
+        ]);
+
+
+        return response()->json(['message' => 'Event created and logged in']);
     }
 
     /**

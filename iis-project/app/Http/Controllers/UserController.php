@@ -14,8 +14,8 @@ use App\Http\Requests\SignupRequest;
 use App\Http\Requests\LoginRequest;
 class UserController extends Controller
 {
-    public function getUser(){
-
+    public function getUser(Request $request){
+        $id = Auth::id();
         $user = User::find($id);
         return response()->json($user);
     }

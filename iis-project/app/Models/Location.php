@@ -9,6 +9,16 @@ class Location extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 
+        'address_line_1',
+        'city', 
+        'zip_code', 
+        'country',
+        'description', 
+        'created_by', 
+    ];
+
     public function images()
     {
         return $this->hasMany(Image::class);

@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import axiosClient from '../axios-client';
 import { Navigate, useNavigate } from 'react-router-dom';
+import {useStateContext} from "../components/Context.jsx";
+
 
 const Login = () => {
+    
+      const { setUser, setToken } = useStateContext()
+  const [message, setMessage] = useState(null)
+    
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const navigate = useNavigate();
-    const handleSignIn = async () => {
+    const handleSignIn = () => {
             axiosClient.post('/login', credentials)
-            .then( (response) => {console.log(response);navigate('/dashboard');})
+            .then( (response) => {
+                console.log("toto sa deje brasko")
+                setToken('true');
+                setUser('hello');
+                console.log(response);
+                navigate('/dashboard');})
             .catch(error => {console.log(error); return (<Navigate to="/dashboard" />);});
         }
 

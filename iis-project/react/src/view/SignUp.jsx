@@ -1,35 +1,34 @@
 
 import React, { useState,useRef } from 'react';
 import axiosClient from '../axios-client';
+import {useStateContext} from "../components/Context.jsx";
 
 const SignUp = () => {
+
+    const { setUser, setToken } = useStateContext()
     const nameRef = useRef();
     const lastNameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
-
-    const handleSignIn = async (event) => {
+    function handleSignIn(event) {
         event.preventDefault();
-        try {
-            const request = {
-                first_name: nameRef.current.value,
-                last_name: lastNameRef.current.value,
-                email: emailRef.current.value,
-                password: passwordRef.current.value,
-                password_confirmation: passwordConfirmationRef.current.value,
-            };
-            const response = axiosClient.post('/signin', request);
-            console.log('toto je response ty coco');
-            console.log(response);
-
-            // Handle successful sign in response (store session id in cookies if needed)
-        } catch (error) {
-            console.log('toto je error ty coco');
-            console.log(error); 
-
-        }
-    };
+        const request = {
+            first_name: nameRef.current.value,
+            last_name: lastNameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            password_confirmation: passwordConfirmationRef.current.value,
+        };
+        axiosClient.post('/signin', request)
+            .then((response) => {
+                setToken('true');
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     return (
         <div>

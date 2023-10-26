@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\CategoryController;
 
 
 /*
@@ -25,6 +29,11 @@ Route::middleware(['web'])->group(function () {
     Route::post('/signin', [AuthController::class,'register']);
     Route::post('/logout', [AuthController::class,'logout']);
     Route::post('/auth', [AuthController::class,'auth']);
+    Route::get('/user', [UserController::class,'getUser']);
+    Route::get('/events', [EventController::class,'getEvents']);
+    Route::post('/createevent', [EventController::class,'create']);
+    Route::post('/createlocation', [LocationController::class,'create']);
+    Route::post('/createcategory', [CategoryController::class,'create']);
 });
 
 Route::middleware(['auth'])->group(function () {

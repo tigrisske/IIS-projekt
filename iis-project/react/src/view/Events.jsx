@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 
-const User = () => {
+const Events = () => {
   const [userData, setUserData] = useState(null); // State to store user data
 
   useEffect(() => {
     // Fetch user data when the component mounts
-    axiosClient.get('/user', { withCredentials: true })
+    axiosClient.get('/events', { withCredentials: true })
       .then(response => {
         console.log("Data received:", response.data);
         setUserData(response.data); // Store the user data in the state
@@ -21,6 +21,7 @@ const User = () => {
       {userData ? ( // Conditionally render the user data
         <div>
           <div>
+          I need more buulets, i need more wepons
             <div>
                 {userData.first_name}
                 {userData.last_name}
@@ -42,4 +43,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Events;
