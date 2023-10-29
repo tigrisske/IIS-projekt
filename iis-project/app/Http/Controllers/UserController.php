@@ -2,17 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class UserController extends Controller
 {
+    /*
+     * Get the authenticated User.
+     */
+    public function getUserData(Request $request)
+    {
+        $user = request()->user();
+        return response()->json([
+            'user' => $user
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return response()->json([
+            'users' => $users,
+
+        ], 200);
     }
 
     /**
@@ -34,15 +49,15 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(User $user)
     {
-        //
+        return response()->json(['user' => $user]);
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Event $event)
+    public function edit(User $user)
     {
         //
     }
@@ -50,7 +65,7 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -58,17 +73,9 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event)
+    public function destroy(User $user)
     {
         //
-    }
-
-    public function getUnConfirmed()
-    {
-        $unconfirmed_events = Event::where('is_confirmed', false)->get();
-        return response()->json([
-            'events' => $unconfirmed_events,
-        ], 200);
     }
 
 }

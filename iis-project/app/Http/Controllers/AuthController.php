@@ -20,13 +20,12 @@ class AuthController extends Controller
             // $session = $request->session()-regenerate();
             $request->session()->regenerate();
             // $session_id = $session->getId();
-
-            return response()->json(['message' => 'Authentication successful'], 200);//->headers('SESSION_ID', $session_id);
+            $user = User::find(Auth::id());
+            return response()->json(['message' => 'Authentication successful', 'user' => $user], 200);//->headers('SESSION_ID', $session_id);
         }
 
         return response()->json(['error' => 'Invalid credentials'], 401);
     }
-
     public function register(SignupRequest $request)
     {
         $data = $request->validated();

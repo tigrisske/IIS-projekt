@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -16,24 +18,20 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware(['web'])->group(function () {
-    Route::post('/login', [AuthController::class,'login']);
-    Route::post('/signin', [AuthController::class,'register']);
-    Route::post('/logout', [AuthController::class,'logout']);
-    Route::post('/auth', [AuthController::class,'auth']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/signin', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/auth', [AuthController::class, 'auth']);
+    Route::post('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
 });
 
-Route::middleware(['auth'])->group(function () {
+// Routes only for admin
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    // List all users
+    Route::post('/users', [UserController::class, 'index']);
+    Route::post('/users/{user}', [UserController::class, 'show']);
 });
-
-Route::middleware('auth:sanctum')->get('/check-auth', function (Request $request) {
-    return response()->json(['authenticated' => true]);
-});
-
 
 //TODO check whether user has a valid session
-Route::post('/checksession' , [AuthController::class, 'checkSession']);
+Route::post('/checksession', [AuthController::class, 'checkSession']);
