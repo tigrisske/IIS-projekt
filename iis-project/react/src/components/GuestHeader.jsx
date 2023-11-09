@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Header.css';
+import './styles/Header.css';
 
 const GuestHeader = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,6 +19,7 @@ const GuestHeader = () => {
     <div className="guest-header">
       <p className="header-text"><a  href="/login">Login</a></p>
       <p className="header-text"><a  href="/signup">Register</a></p>
+      <p className="header-text"><a  href="/events">Events</a></p>
    </div>
   );
 };

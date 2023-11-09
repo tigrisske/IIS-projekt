@@ -13,17 +13,22 @@ export default function Dashboard() {
 
     const navigate = useNavigate();
 
-    function logout() {
+    const {token, setToken} = useStateContext();
+    function logout(){
+        console.log("token before logging out:" ,token);
         axiosClient.post('/logout', { withCredentials: true })
-            .then((response) => {
-                console.log(response);
-                localStorage.removeItem('USER');
-            })
-            .catch(error => {
-                console.log(error);
-                console.log("error"); return (<Navigate to="/login" />);
-            });
-    }
+        .then(  (response) => {console.log(response);
+        setToken(null);
+        console.log("token removed");
+        localStorage.removeItem('ACCESS_TOKEN');
+        console.log(token);
+        
+        // navigate('/login'); 
+    })
+        .catch(error => {console.log(error);
+        console.log("error"); return (<Navigate to="/login" />);
+        });
+    }  
 
     function check() {
         axiosClient.post('/auth', { withCredentials: true })

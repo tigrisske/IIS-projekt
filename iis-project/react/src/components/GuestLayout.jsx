@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { useStateContext } from "./Context";
 import { Navigate } from "react-router-dom";
 import GuestHeader from "./GuestHeader";
-import './Main.css';
+import './styles/Main.css';
 
 export default function GuestLayout() {
 

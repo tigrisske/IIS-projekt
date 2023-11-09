@@ -5,12 +5,14 @@ import axiosClient from '../axios-client';
 const CreateCategory = () => {
     const nameRef = useRef();
     const createdByRef = useRef();
+    const parentIdRef = useRef();
 
     const handleCreate = async (event) => {
         event.preventDefault();
         try {
             const request = {
                 name: nameRef.current.value,
+                parent_id: parentIdRef.current.value,
                 created_by: createdByRef.current.value,
             };
             const response = axiosClient.post('/createcategory', request);
@@ -36,6 +38,11 @@ const CreateCategory = () => {
                 type="text"
                 ref={nameRef}
                 placeholder="Name"
+            />
+            <input
+                type="text"
+                ref={parentIdRef}
+                placeholder="parent id"
             />
             <input
                 type="text"

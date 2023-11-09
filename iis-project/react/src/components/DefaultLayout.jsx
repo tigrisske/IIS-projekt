@@ -2,6 +2,8 @@ import { Link, Outlet } from 'react-router-dom';
 import Header from './Header';
 import { useStateContext } from './Context';
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import  axiosClient  from '../axios-client';
 
 export default function DefaultLayout(){
 
