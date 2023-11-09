@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
-import { useStateContext } from '../context/Context';
+import { useStateContext } from '../components/Context';
 import { Link } from 'react-router-dom';
 
 const AdminToDo = () => {
@@ -14,9 +14,7 @@ const AdminToDo = () => {
 
     useEffect(() => {
         document.title = "Users List";
-        axiosClient.post(
-            "/unconfirmed_events"
-        )
+        axiosClient.get("/unconfirmed_events", { withCredentials: true })
             .then((response) => {
                 console.log(response.data);
                 setEvents(response.data.events);

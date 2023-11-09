@@ -4,20 +4,21 @@
 
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
-import { useStateContext } from '../context/Context';
+import { useStateContext } from '../components/Context';
 import { Link } from 'react-router-dom';
 
 const UsersList = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        document.title = "Users List";
-        axiosClient.post(
-            "/users"
-        )
+        axiosClient.get('/users', { withCredentials: true })
             .then((response) => {
+                console.log("users list");
+                console.log(response.data);
                 setUsers(response.data.users);
-            })
+            }).catch(error => {
+                console.log(error.response.data);
+            });
     }, []);
 
     return (

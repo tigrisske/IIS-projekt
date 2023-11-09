@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 
+        'created_by', 
+    ];
+
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');

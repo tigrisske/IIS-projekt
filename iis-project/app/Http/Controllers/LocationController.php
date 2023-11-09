@@ -18,9 +18,21 @@ class LocationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = $request;//->validated();
+        $event = Location::create([
+            'name' => $data['name'],
+            'address_line_1' => $data['address_line_1'],
+            'city' => $data['city'], 
+            'zip_code' => $data['zip_code'],
+            'country' => $data['country'], 
+            'description' => $data['description'], 
+            'created_by' => $data['created_by'], 
+        ]);
+
+
+        return response()->json(['message' => 'Location created and logged in']);
     }
 
     /**

@@ -18,9 +18,16 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = $request;//->validated();
+        $event = Category::create([
+            'name' => $data['name'],
+            'created_by' => $data['created_by'],
+        ]);
+
+
+        return response()->json(['message' => 'Location created and logged in']);
     }
 
     /**

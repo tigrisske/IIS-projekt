@@ -2,21 +2,22 @@
 import React, { useState } from "react"
 import axiosClient from '../axios-client';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useStateContext } from "../context/Context";
+import { Link, Outlet } from 'react-router-dom';
+import { useStateContext } from "../components/Context.jsx";
 import UsersList from "../components/UsersList";
-import { useUserContext } from "../context/UserContext";
 import AdminToDo from "../components/AdminToDo";
 
-const Dashboard = () => {
-    const {user, setUser} = useUserContext();
-    console.log();
+
+export default function Dashboard() {
+    const { user } = useStateContext();
+
     const navigate = useNavigate();
 
     function logout() {
         axiosClient.post('/logout', { withCredentials: true })
             .then((response) => {
                 console.log(response);
-                navigate('/login');
+                localStorage.removeItem('USER');
             })
             .catch(error => {
                 console.log(error);
@@ -24,31 +25,57 @@ const Dashboard = () => {
             });
     }
 
+    function check() {
+        axiosClient.post('/auth', { withCredentials: true })
+            .then((response) => { console.log(response); })
+            .catch(error => {
+                console.log(error);
+                console.log("error"); return (<Navigate to="/login" />);
+            });
 
-    // Return the dashboard page users list if the user is admin
-    // Otherwise return the dashboard page for a single user
+    }
+    function _user() {
+        navigate('/user');
+    }
+    function events() {
+        navigate('/events');
+    }
+    function create_event() {
+        navigate('/createevent');
+    }
+    function create_location() {
+        navigate('/createlocation');
+    }
+    function create_category() {
+        navigate('/createcategory');
+    }
+
     return (
         <div>
-      <h1>Welcome to the Dashboard, {user.first_name}!</h1>
-      {/* Add content based on user roles */}
-      {user.role === 'admin' && (
-        <div>
-          <h2>Admin Dashboard Content</h2>
-          <UsersList />
-          <AdminToDo/>
+            <h1>Welcome to the Dashboard, {user.first_name}!</h1>
+            <button onClick={logout}>Logout</button>
+            <button onClick={_user}>My profile</button>
+            <button onClick={create_event}>Create Event</button>
+            <button onClick={create_location}>Create Location</button>
+            <button onClick={create_category}>Create Category</button>
+            <button onClick={events}>Events</button>
+            <button onClick={check}>Verify Login</button>
+            {user.role === 'admin' && (
+                <div>
+                    <h2>Admin Dashboard Content</h2>
+                    <UsersList />
+                    <AdminToDo />
+                </div>
+            )}
+            {user.role === 'member' && (
+                <div>
+                    <h2>Member Dashboard Content</h2>
+                    {/* Add user-specific components here */}
+                    <UsersList />
+                    <p>Hello</p>
+                </div>
+            )}
         </div>
-      )}
-      {user.role === 'member' && (
-        <div>
-          <h2>Member Dashboard Content</h2>
-          {/* Add user-specific components here */}
-          <UsersList />
-          <p>Hello</p>
-        </div>
-      )}
-    </div>
     )
 
 }
-
-export default Dashboard
