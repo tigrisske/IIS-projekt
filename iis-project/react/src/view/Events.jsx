@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 import Event from '../components/Event.jsx';
-import './EventsView.css';
+import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
+import { useStateContext } from '../components/Context';
 
-const Events = (strana = 1) => {
-  const {pagee} = useParams();
+const Events = () => {
+  const { pagee } = useParams();
   const [eventData, setEventData] = useState(null);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
+  const { token } = useStateContext();
 
+  // Update the page state when pagee changes
   useEffect(() => {
-    console.log(pagee);
+    setPage(pagee); // Set the page state to match the pagee parameter
+    console.log("Page:", pagee);
+    // let route = '/events';
+    
+    // if (!token){
+    //   route = '/guest/events';
+    // }
+
     axiosClient.get('/events/count', { withCredentials: true })
       .then(response => {
         console.log("Count received:", response.data.count);
@@ -21,7 +31,7 @@ const Events = (strana = 1) => {
         console.log("Error fetching count:", error);
       });
 
-    axiosClient.get(`/events?page=${strana}`, { withCredentials: true })
+    axiosClient.get(`/events/${pagee}`, { withCredentials: true })
       .then(response => {
         console.log("Data received:", response.data);
         setEventData(response.data);
@@ -29,7 +39,7 @@ const Events = (strana = 1) => {
       .catch(error => {
         console.log("Error fetching events:", error);
       });
-  }, []); 
+  }, [pagee]);
 
   return (
     <div>
@@ -53,7 +63,6 @@ const Events = (strana = 1) => {
       </p>
     </div>
   );
-  ;
 };
 
 export default Events;

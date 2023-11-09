@@ -23,6 +23,7 @@ class CategoryController extends Controller
         $data = $request;//->validated();
         $event = Category::create([
             'name' => $data['name'],
+            'parent_id' => $data['parent_id'],
             'created_by' => $data['created_by'],
         ]);
 

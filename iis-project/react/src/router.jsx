@@ -8,8 +8,8 @@ import SignUp from "./view/SignUp.jsx";
 import User from "./view/User.jsx";
 import Events from "./view/Events.jsx";
 import CreateEvent from "./view/CreateEvent.jsx";
-import CreateLocation from "./view/createLocation.jsx";
-import CreateCategory from "./view/createCategory.jsx";
+import CreateLocation from "./view/CreateLocation.jsx";
+import CreateCategory from "./view/CreateCategory.jsx";
 
 const router = createBrowserRouter([
     {
@@ -20,7 +20,6 @@ const router = createBrowserRouter([
                 path: '/dashboard',
                 element: <Dashboard/>
             },
-           
             {
                 path: '/user',
                 element: <User/>
@@ -30,7 +29,7 @@ const router = createBrowserRouter([
                 element: <Events/>
             },
 {
-                path: '/events/:page',
+                path: '/events/:pagee',
                 element: <Events/>
             },
             {
@@ -58,65 +57,20 @@ const router = createBrowserRouter([
             {
                 path: '/signup',
                 element: <SignUp/>
-            }
+            },
+            {
+                path: 'guest/events',
+                element: <Events/>
+            },
+{
+                path: 'guest/events/:pagee',
+                element: <Events/>
+            },
 
         ]
     }
     ]
 )
-//     },
-//     {
-//         path: '/',
-//         element: <GuestLayout/>,
-//         children: [
-//             {
-//                 path: '/',
-//                 element: <Dashboard/>
-//             },
-//             {
-//                 path: '/login',
-//                 element: <Login/>
-//             },
-//             {
-//                 path: '/register',
-//                 element: <Register/>
-//             }
-//         ]
-//     }
-// ])
-//         children: [
-//             {
-//                 path: '/',
-//                 element: <Navigate to="/users"/>
-//             },
-//             {
-//                 path: '/dashboard',
-//                 element: <Dashboard/>
-//             },
-//             {
-//                 path: '/users',
-//                 element: <Users/>
-//             }
-//         ]
-//     },
-//     {
-//         path: '/',
-//         element: <GuestLayout/>,
-//         children: [
-//             {
-//                 path: '/login',
-//                 element: <Login/>
-//             },
-//             {
-//                 path: '/signup',
-//                 element: <Signup/>
-//             }
-//         ]
-//     },
-//    {
-//     path: '*',
-//     element: <NotFound/>
-//    }
-// ])
+
 
 export default router;

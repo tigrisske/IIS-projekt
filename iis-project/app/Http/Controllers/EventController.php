@@ -45,7 +45,7 @@ class EventController extends Controller
     }
     public function get_num_events()
     {
-        $count = Event::count();
+        $count = Event::where('is_confirmed', 1)->count();
         return response()->json(['count' => $count]);
     }
 
@@ -53,17 +53,15 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event , $page = 1)
-    {
+    public function show(Event $event, $page = 1)
+{
+    $events = Event::where('is_confirmed', 1)
+        ->skip(((int)$page - 1) * 4)
+        ->take(4)
+        ->get();
 
-        $events = Event::skip(($page - 1) * 4)->take(4)->get();
-        return response()->json(['events' => $events]);
-
-
-        // $events = Event::all();
-
-        // return response()->json(['events' => $events]);
-    }
+    return response()->json(['events' => $events]);
+}
 
     /**
      * Show the form for editing the specified resource.

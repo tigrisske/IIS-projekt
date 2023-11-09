@@ -3,6 +3,7 @@ import React from "react"
 import axiosClient from '../axios-client';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Link, Outlet } from 'react-router-dom';
+import { useStateContext } from '../components/Context.jsx';
 
 
 
@@ -10,11 +11,17 @@ export default function Dashboard(){
 
 const navigate = useNavigate();
 
+const {token, setToken} = useStateContext();
 function logout(){
+    console.log("token before logging out:" ,token);
     axiosClient.post('/logout', { withCredentials: true })
     .then(  (response) => {console.log(response);
+    setToken(null);
+    console.log("token removed");
     localStorage.removeItem('ACCESS_TOKEN');
-    navigate('/login'); 
+    console.log(token);
+    
+    // navigate('/login'); 
 })
     .catch(error => {console.log(error);
     console.log("error"); return (<Navigate to="/login" />);

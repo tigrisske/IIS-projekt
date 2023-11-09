@@ -35,8 +35,10 @@ Route::middleware(['web'])->group(function () {
     Route::post('/auth', [AuthController::class,'auth']);
     Route::get('/user', [UserController::class,'getUser']);
 
+
     Route::get('/events', [EventController::class,'show']);
     Route::get('/events/count', [EventController::class,'get_num_events']);
+    Route::get('/events/{page}', [EventController::class,'show']);
     Route::post('/createevent', [EventController::class,'create']);
     Route::post('/createlocation', [LocationController::class,'create']);
     Route::post('/createcategory', [CategoryController::class,'create']);
