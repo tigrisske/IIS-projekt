@@ -38,12 +38,12 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
+    Route::get('/events/count', [EventController::class, 'get_num_events']);
+    Route::get('/events/{page}', [EventController::class, 'show']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
-    Route::get('/events', [EventController::class, 'show']);
-    Route::get('/events/count', [EventController::class, 'get_num_events']);
 });
 
 Route::middleware('auth:sanctum')->get('/check-auth', function (Request $request) {
