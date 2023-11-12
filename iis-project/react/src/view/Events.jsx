@@ -3,7 +3,9 @@ import axiosClient from '../axios-client';
 import Event from '../components/Event.jsx';
 import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
-import { useStateContext } from '../components/Context';
+
+
+
 
 const Events = () => {
   const { pagee } = useParams();
@@ -43,6 +45,9 @@ const Events = () => {
 
   return (
     <div>
+      <div className="create-event">
+        <button onClick={() => window.location.href = "/createevent"}>Create Event</button>
+        </div>
       {eventData ? (
         <div className="events">
           {eventData.events.map((event) => (
