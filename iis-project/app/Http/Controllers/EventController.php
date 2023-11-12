@@ -10,9 +10,14 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->input('perPage', 1); // Number of events per page, default is 9
+        $page = $request->input('page', 1); // Current page, default is 1
+
+        $events = Event::paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($events);
     }
 
     /**
@@ -20,16 +25,16 @@ class EventController extends Controller
      */
     public function create(Request $request)
     {
-        $data = $request;//->validated();
+        $data = $request; //->validated();
         $event = Event::create([
             'name' => $data['name'],
             'start_date' => $data['start_date'],
-            'end_date' => $data['end_date'], 
-            'capacity' => $data['capacity'], 
-            'description' => $data['description'], 
-            'category_id' => $data['category_id'], 
-            'location_id' => $data['location_id'], 
-            'is_confirmed' => $data['is_confirmed'], 
+            'end_date' => $data['end_date'],
+            'capacity' => $data['capacity'],
+            'description' => $data['description'],
+            'category_id' => $data['category_id'],
+            'location_id' => $data['location_id'],
+            'is_confirmed' => 0
         ]);
 
 
@@ -53,15 +58,12 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event, $page = 1)
-{
-    $events = Event::where('is_confirmed', 1)
-        ->skip(((int)$page - 1) * 4)
-        ->take(4)
-        ->get();
-
-    return response()->json(['events' => $events]);
-}
+    public function show(Event $event)
+    {
+        return response()->json([
+            'event' => $event,
+        ], 200);
+    }
 
     /**
      * Show the form for editing the specified resource.

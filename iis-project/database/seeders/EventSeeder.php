@@ -20,8 +20,8 @@ class EventSeeder extends Seeder
                 'end_date' => '2023-12-12',
                 'capacity' => 20000,
                 'description' => 'Some description',
-                'category_id' => 4,
-                'location_id' => 12,
+                'category_id' => 1,
+                'location_id' => 1,
                 'is_confirmed' => 1,
             ],
             [
@@ -30,8 +30,8 @@ class EventSeeder extends Seeder
                 'end_date' => '2023-12-12',
                 'capacity' => 20000,
                 'description' => 'Some description',
-                'category_id' => 5,
-                'location_id' => 123,
+                'category_id' => 1,
+                'location_id' => 1,
                 'is_confirmed' => 1,
             ],
             [
@@ -40,8 +40,8 @@ class EventSeeder extends Seeder
                 'end_date' => '2023-12-13',
                 'capacity' => 5000,
                 'description' => 'Some description',
-                'category_id' => 6,
-                'location_id' => 124,
+                'category_id' => 2,
+                'location_id' => 2,
                 'is_confirmed' => 1,
             ],
             [
@@ -50,8 +50,8 @@ class EventSeeder extends Seeder
                 'end_date' => '2023-12-13',
                 'capacity' => 150,
                 'description' => 'Some description',
-                'category_id' => 7,
-                'location_id' => 125,
+                'category_id' => 1,
+                'location_id' => 1,
                 'is_confirmed' => 0,
             ],
             // Add more data entries as needed
