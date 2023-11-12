@@ -7,7 +7,7 @@ import axiosClient from '../axios-client';
 import { useStateContext } from '../components/Context';
 import { Link } from 'react-router-dom';
 
-const AdminToDo = () => {
+export const AdminToDo = () => {
     const [events, setEvents] = useState([]);
     const [locations, setLocations] = useState([]);
 

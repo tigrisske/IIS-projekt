@@ -1,66 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axiosClient from '../axios-client';
-import Event from '../components/Event.jsx';
-import './styles/EventsView.css';
-import { useParams } from 'react-router-dom';
-import { useStateContext } from '../components/Context';
+import Event from '../components/Event';
 
-const Events = () => {
-  const { pagee } = useParams();
-  const [eventData, setEventData] = useState(null);
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState(0);
-  const { token } = useStateContext();
+export const Events = () => {
+  const [events, setEvents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Update the page state when pagee changes
   useEffect(() => {
-    setPage(pagee); // Set the page state to match the pagee parameter
-    console.log("Page:", pagee);
-    // let route = '/events';
-    
-    // if (!token){
-    //   route = '/guest/events';
-    // }
+    const fetchEvents = async () => {
+      try {
+        const response = await axiosClient.get(`/events?page=${currentPage}`);
+        setEvents(response.data.data); // Use response.data.data for Laravel pagination
+        setTotalPages(response.data.last_page);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
 
-    axiosClient.get('/events/count', { withCredentials: true })
-      .then(response => {
-        console.log("Count received:", response.data.count);
-        setCount(response.data.count);
-      })
-      .catch(error => {
-        console.log("Error fetching count:", error);
-      });
+    fetchEvents();
+  }, [currentPage]);
 
-    axiosClient.get(`/events/${pagee}`, { withCredentials: true })
-      .then(response => {
-        console.log("Data received:", response.data);
-        setEventData(response.data);
-      })
-      .catch(error => {
-        console.log("Error fetching events:", error);
-      });
-  }, [pagee]);
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
-      {eventData ? (
-        <div className="events">
-          {eventData.events.map((event) => (
-            <Event key={event.id} {...event} />
-          ))}
-        </div>
-      ) : (
-        <p>Loading event data...</p>
-      )}
-    
-         <p>
-        {Array.from({ length: Math.ceil(count / 4) }, (_, index) => (
-          <a key={index} href={`/events/${index + 1}`}>
-            {index + 1}
-           </a>
+      <h1>Events</h1>
+      <ul>
+        {events.map((event) => (
+          <Event key={event.id} {...event} />
         ))}
-
-      </p>
+      </ul>
+      <div>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button key={index + 1} onClick={() => handlePageClick(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

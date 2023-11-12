@@ -7,7 +7,7 @@ import axiosClient from '../axios-client';
 import { useStateContext } from '../components/Context';
 import { Link } from 'react-router-dom';
 
-const UsersList = () => {
+export const UsersList = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {

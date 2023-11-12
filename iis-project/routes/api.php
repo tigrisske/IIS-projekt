@@ -7,11 +7,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\ImageController;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -27,23 +22,23 @@ use App\Http\Controllers\ImageController;
 Route::middleware(['web'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/signin', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/auth', [AuthController::class, 'auth']);
     Route::get('/user', [UserController::class, 'getUser']);
 
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/event', [EventController::class, 'show']);
+});
 
+Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/createevent', [EventController::class, 'create']);
     Route::post('/createlocation', [LocationController::class, 'create']);
     Route::post('/createcategory', [CategoryController::class, 'create']);
-
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
-    Route::get('/events/count', [EventController::class, 'get_num_events']);
-    Route::get('/events/{page}', [EventController::class, 'show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
 });
 
 Route::middleware('auth:sanctum')->get('/check-auth', function (Request $request) {
