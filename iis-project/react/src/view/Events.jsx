@@ -3,6 +3,7 @@ import axiosClient from '../axios-client';
 import Event from '../components/Event.jsx';
 import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
+import { useStateContext } from '../components/Context.jsx';
 
 
 
