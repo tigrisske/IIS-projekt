@@ -3,7 +3,7 @@ import axiosClient from '../axios-client';
 import {useStateContext} from "../components/Context.jsx";
 import { Navigate, useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+export const SignUp = () => {
     const navigate = useNavigate();
     const { setUser, setToken } = useStateContext()
     const nameRef = useRef();

@@ -56,8 +56,13 @@ export const RenderMenu = () => {
                     </Link>
                 </div>
             ) : (
-                <div className="menuItem">
-                    <Link to="login">Log in</Link>
+                <div>
+                    <div className="menuItem">
+                        <Link to="login">Log in</Link>
+                    </div>
+                    <div className="menuItem">
+                        <Link to="signup">Sign Up</Link>
+                    </div>
                 </div>
             )}
         </div>

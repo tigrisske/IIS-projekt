@@ -24,7 +24,7 @@ const formatTime = (timeInSeconds) => {
   };
   
 
-const CreateEvent = () => {
+export const CreateEvent = () => {
     const nameRef = useRef();
     const capacityRef = useRef();
     const descriptionRef = useRef();
