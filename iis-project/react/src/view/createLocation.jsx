@@ -2,7 +2,10 @@
 import React, { useState,useRef } from 'react';
 import axiosClient from '../axios-client';
 
-const CreateLocation = () => {
+export const CreateLocation = () => {
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isError, setIsError] = useState(false);
+
     const nameRef = useRef();
     const addressLineRef = useRef();
     const cityRef = useRef();
@@ -13,7 +16,6 @@ const CreateLocation = () => {
 
     const handleCreate = async (event) => {
         event.preventDefault();
-        try {
             const request = {
                 name: nameRef.current.value,
                 address_line_1: addressLineRef.current.value,
@@ -21,9 +23,12 @@ const CreateLocation = () => {
                 zip_code: zipCodeRef.current.value,
                 country: countryRef.current.value,
                 description: descriptionRef.current.value,
-                created_by: createdByRef.current.value,
             };
-            const response = axiosClient.post('/createlocation', request);
+            axiosClient.post('/createlocation', request)
+            .then(response => {
+            
+            setIsError(false);
+            setErrorMessage('Successfully created!');
             localStorage.setItem('is_logged', true);
             console.log('toto je response ty coco');
             console.log(response);
@@ -34,17 +39,17 @@ const CreateLocation = () => {
             zipCodeRef.current.value = '';
             countryRef.current.value = '';
             descriptionRef.current.value = '';
-            createdByRef.current.value = '';
+            })
+        .catch (error =>{
+            setIsError(true);
+            setErrorMessage(`Error creating location! ${error.response.data.message}`);
 
-        } catch (error) {
-            console.log('toto je error ty coco');
-            console.log(error); 
-
-        }
+        })
     };
 
     return (
         <div>
+            <h1>Create new Location!</h1>
             <input
                 type="text"
                 ref={nameRef}
@@ -75,13 +80,10 @@ const CreateLocation = () => {
                 ref={descriptionRef}
                 placeholder="description"
             />
-            <input
-                type="text"
-                ref={createdByRef}
-                placeholder="created by"
-            />
             <button onClick={handleCreate}>Create</button>
+            {errorMessage && <div style={{ color: isError ? 'red' : 'green' }}>{errorMessage}</div>}
         </div>
+
     );
 };
 

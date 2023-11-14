@@ -27,7 +27,7 @@ export const RenderRoutes = () => {
 }
 
 const MenuItem = ({ route }) => (
-    <div className="menuItem">
+    <div className="header-text">
         <Link to={route.path}>{route.name}</Link>
     </div>
 );
@@ -36,7 +36,7 @@ export const RenderMenu = () => {
     const { user, logout } = useStateContext();
 
     return (
-        <div className="menu">
+        <div className="guest-header">
             {nav
                 .filter((route) => {
                     const { protected_route, min_role } = route;

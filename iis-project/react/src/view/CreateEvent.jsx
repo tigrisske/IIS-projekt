@@ -30,12 +30,14 @@ export const CreateEvent = () => {
     const descriptionRef = useRef();
     const categoryIdRef = useRef();
     const locationIdRef = useRef();
-    const isConfirmedRef = useRef();
 
     const [selectedStartTime, setSelectedStartTime] = useState(0);
     const [selectedEndTime, setSelectedEndTime] = useState(0);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const [isError, setIsError] = useState(false);
   
     const handleStartDateChange = (date) => {
       setStartDate(date);
@@ -54,8 +56,17 @@ export const CreateEvent = () => {
         const formatedStartDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
         const formatedEndDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
 
-        console.log(formatedStartDate);
-        console.log(formatedEndDate)
+        console.log(startDate);
+        console.log(endDate)
+
+        if (formatedEndDate === formatedStartDate){
+          console.log("same date");
+          if (selectedEndTime < selectedStartTime){
+            setIsError(true);
+            setErrorMessage("End time cannot be before start time!");
+            return;
+          }
+        }
 
         //time 
       
@@ -68,12 +79,13 @@ export const CreateEvent = () => {
           description: descriptionRef.current.value,
           category_id: categoryIdRef.current.value,
           location_id: locationIdRef.current.value,
-          is_confirmed: isConfirmedRef.current.value,
         };
       
         axiosClient.post('/createevent', request)
           .then(response => {
             console.log('Response:', response);
+            setIsError(false);
+            setErrorMessage('Successfully created!');
       
             // Clear input values
             nameRef.current.value = '';
@@ -81,10 +93,11 @@ export const CreateEvent = () => {
             descriptionRef.current.value = '';
             categoryIdRef.current.value = '';
             locationIdRef.current.value = '';
-            isConfirmedRef.current.value = '';
           })
           .catch(error => {
             console.log('Error:', error);
+            setIsError(true);
+            setErrorMessage(`Error creating event! ${error.response.data.message}`);
           });
       };
       
@@ -109,6 +122,7 @@ export const CreateEvent = () => {
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
+          maxDate={endDate ? endDate : null}
           dateFormat="yyyy-MM-dd"
         />
  <div>
@@ -162,13 +176,6 @@ export const CreateEvent = () => {
             />
             <input
                 type="text"
-                ref={isConfirmedRef}
-                placeholder="is confirmed"
-                // value={credentials.password}
-                // onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            />
-            <input
-                type="text"
                 ref={locationIdRef}
                 placeholder="location id"
                 // value={credentials.passwordConfirm}
@@ -182,6 +189,7 @@ export const CreateEvent = () => {
                 // onChange={(e) => setCredentials({ ...credentials, passwordConfirm: e.target.value })}
             />
             <button onClick={handleCreate}>Create</button>
+            {errorMessage && <div style={{ color: isError ? 'red' : 'green' }}>{errorMessage}</div>}
         </div>
     );
 }

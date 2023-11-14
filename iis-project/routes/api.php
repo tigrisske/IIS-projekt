@@ -26,6 +26,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event', [EventController::class, 'show']);
 });
 

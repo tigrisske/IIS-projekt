@@ -18,6 +18,7 @@ class Event extends Model
         'category_id', 
         'location_id', 
         'is_confirmed',
+        'created_by'
     ];
 
     public function images()

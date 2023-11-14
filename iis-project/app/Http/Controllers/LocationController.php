@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LocationRequest;
 
 class LocationController extends Controller
 {
@@ -18,9 +20,10 @@ class LocationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(LocationRequest $request)
     {
-        $data = $request;//->validated();
+        $user = Auth::user();
+        $data = $request->validated();
         $event = Location::create([
             'name' => $data['name'],
             'address_line_1' => $data['address_line_1'],
@@ -28,7 +31,7 @@ class LocationController extends Controller
             'zip_code' => $data['zip_code'],
             'country' => $data['country'], 
             'description' => $data['description'], 
-            'created_by' => $data['created_by'], 
+            'created_by' => $user->id
         ]);
 
 

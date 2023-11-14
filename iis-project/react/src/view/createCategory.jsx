@@ -2,7 +2,7 @@
 import React, { useState,useRef } from 'react';
 import axiosClient from '../axios-client';
 
-const CreateCategory = () => {
+export const CreateCategory = () => {
     const nameRef = useRef();
     const createdByRef = useRef();
     const parentIdRef = useRef();

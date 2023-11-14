@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from '../axios-client';
+import axiosClient from '../axios-client.js';
 import Event from '../components/Event.jsx';
 import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { useStateContext } from '../components/Context.jsx';
 
 
 
-export const Events = () => {
+export const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -16,7 +16,7 @@ export const Events = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosClient.get(`/events?page=${currentPage}`);
+        const response = await axiosClient.get(`/myevents?page=${currentPage}`);
         setEvents(response.data.data); // Use response.data.data for Laravel pagination
         setTotalPages(response.data.last_page);
       } catch (error) {
@@ -33,7 +33,7 @@ export const Events = () => {
 
   return (
     <div >
-      <h1>Events</h1>
+      <h1>My Events</h1>
       <ul className = "app-body">
         {events.map((event) => (
           <Event key={event.id} {...event} />
@@ -50,4 +50,4 @@ export const Events = () => {
   );
 };
 
-export default Events;
+export default MyEvents;

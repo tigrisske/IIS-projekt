@@ -3,7 +3,10 @@ import { Home } from "../../view/Home"
 import { Login } from "../../view/Login"
 import { Events } from '../../view/Events'
 import { CreateEvent } from "../../view/CreateEvent"
+import { CreateLocation } from "../../view/CreateLocation"
+import { CreateCategory } from "../../view/CreateCategory"
 import { SignUp } from "../../view/SignUp"
+import { MyEvents } from "../../view/myEvents"
 
 export const nav = [
     {
@@ -11,6 +14,7 @@ export const nav = [
         name: "Home",
         element: <Home />,
         isMenu: true,
+        min_role : 0,
         protected_route: false
     },
     {
@@ -18,6 +22,7 @@ export const nav = [
         name: "Login",
         element: <Login />,
         isMenu: false,
+        min_role : 0,
         protected_route: false
     },
     {
@@ -25,6 +30,7 @@ export const nav = [
         name: "Sign Up",
         element: <SignUp />,
         isMenu: false,
+        min_role : 0,
         protected_route: false
     },
     {
@@ -32,13 +38,39 @@ export const nav = [
         name: "Events",
         element: <Events />,
         isMenu: true,
+        min_role : 0,
         protected_route: false
+    },
+    {
+        path: "/myevents",
+        name: "My Events",
+        element: <MyEvents />,
+        isMenu: true,
+        min_role : 0,
+        protected_route: true
     },
     {
         path: "/createevent",
         name: "Create Event",
         element: <CreateEvent />,
         isMenu: true,
+        min_role : 0,
+        protected_route: true
+    },
+    {
+        path: "/createlocation",
+        name: "Create Location",
+        element: <CreateLocation />,
+        isMenu: true,
+        min_role : 0,
+        protected_route: true
+    },
+    {
+        path: "/createcategory",
+        name: "Create Category",
+        element: <CreateCategory/>,
+        isMenu: true,
+        min_role : 0,
         protected_route: true
     },
     {
@@ -46,6 +78,7 @@ export const nav = [
         name: "Dashboard",
         element: <Dashboard />,
         isMenu: true,
+        min_role : 0,
         protected_route: true,
         min_role: 'member'
     },
