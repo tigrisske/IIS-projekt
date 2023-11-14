@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import router from './router.jsx'
 import './index.css'
 
 // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

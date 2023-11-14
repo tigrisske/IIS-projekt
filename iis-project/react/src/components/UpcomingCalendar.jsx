@@ -29,7 +29,7 @@ export const UpcomingCalendar = () => {
     }, []);
 
     return (
-        <div>
+        <div className='centered-600px-container'>
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"

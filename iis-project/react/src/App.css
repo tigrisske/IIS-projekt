@@ -40,3 +40,112 @@
 .read-the-docs {
   color: #888;
 } */
+
+/* Basic form styling */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Input field styling */
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Label styling */
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Button styling */
+button {
+    background-color: #4caf50;
+    /* Green background color */
+    color: white;
+    /* White text color */
+    padding: 10px 15px;
+    margin: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Hover effect on button */
+button:hover {
+    background-color: #45a049;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    /* Red background color */
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;;
+}
+
+.menu-item{
+    margin: 10px;
+}
+
+.menu-item a{
+    color: white;
+    text-decoration: none;
+}
+
+.menu-item a:hover{
+    color: #45a049;
+}
+
+.centered-600px-container {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.left-start-aligned-flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.end-aligned-row-flex-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

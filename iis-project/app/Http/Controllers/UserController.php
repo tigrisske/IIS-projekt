@@ -34,29 +34,20 @@ class UserController extends Controller
         return response()->json($events);
     }
 
-    /**
-     * Get the events that the are under user's management.
-     */
-    public function getMyEvents(Request $request)
-    {
-        $id = Auth::id();
-        $user = User::find($id);
-        $events = $user->events->where('created_by', '=', $id);
-        return response()->json($events);
-    }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return response()->json([
-            'users' => $users,
+        $perPage = $request->input('perPage', 10); // Number of events per page, default is 10
+        $page = $request->input('page', 1); // Current page, default is 1
 
-        ], 200);
+        $users = User::orderBy('last_name', 'asc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($users);
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -102,7 +93,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 
 }

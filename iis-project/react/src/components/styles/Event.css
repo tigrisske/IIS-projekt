@@ -5,7 +5,8 @@
     max-width: 300px;
     min-width: 300px;
     cursor: pointer;
-    background-color: lightblue
+    background-color: orange;
+    overflow: hidden;
 
     
     

@@ -32,7 +32,6 @@ return new class extends Migration
             $table->dropColumn('last_name');
             $table->dropColumn('phone_number');
             $table->dropColumn('date_of_birth');
-            $table->dropColumn('is_moderator');
         });
     }
 };
