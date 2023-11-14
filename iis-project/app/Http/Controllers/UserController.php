@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,12 +13,36 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\LoginRequest;
+
 class UserController extends Controller
 {
-    public function getUser(Request $request){
+    public function getUser(Request $request)
+    {
         $id = Auth::id();
         $user = User::find($id);
         return response()->json($user);
+    }
+
+    /**
+     * Get the events that the user is registered for.
+     */
+    public function getUpcomingEvents(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::find($id);
+        $events = $user->events->where('start_date', '>=', date('Y-m-d H:i:s'));
+        return response()->json($events);
+    }
+
+    /**
+     * Get the events that the are under user's management.
+     */
+    public function getMyEvents(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::find($id);
+        $events = $user->events->where('created_by', '=', $id);
+        return response()->json($events);
     }
 
     /**
@@ -55,7 +80,7 @@ class UserController extends Controller
     {
         return response()->json(['user' => $user]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */

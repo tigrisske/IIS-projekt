@@ -45,10 +45,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the events tha the user is registered for.
+     * Get the events that the user is registered for, from the pivot table.
      */
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->belongsToMany(Event::class, 'event_user', 'user_id', 'event_id');
     }
 }

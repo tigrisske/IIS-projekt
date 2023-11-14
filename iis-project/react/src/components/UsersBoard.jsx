@@ -4,10 +4,10 @@
 
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
-import { useStateContext } from '../components/Context';
+import { useStateContext } from './Context';
 import { Link } from 'react-router-dom';
 
-export const UsersList = () => {
+export const UsersBoard = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -38,4 +38,4 @@ export const UsersList = () => {
     );
 }
 
-export default UsersList;
+export default UsersBoard;

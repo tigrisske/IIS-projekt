@@ -10,7 +10,6 @@ function compareRoles(user_role, min_role) {
 export const RenderRoutes = () => {
 
     const { user } = useStateContext();
-    console.log(user)
 
     return (
         <Routes>

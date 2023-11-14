@@ -34,6 +34,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/createlocation', [LocationController::class, 'create']);
     Route::post('/createcategory', [CategoryController::class, 'create']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/myupcomingevents', [UserController::class, 'getUpcomingEvents']);
+    Route::get('/myevents', [UserController::class, 'getMyEvents']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {

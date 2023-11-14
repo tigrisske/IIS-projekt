@@ -34,7 +34,7 @@ export const ContextProvider = ({ children }) => {
                 console.log('Login response');
                 console.log(response);
                 let data = response.data.user;
-                let user = {name: data.first_name + " " + data.last_name, role: data.role, isAuthenticated: true}
+                let user = { name: data.first_name + " " + data.last_name, role: data.role, isAuthenticated: true }
                 setUser(user);
                 localStorage.setItem('user', JSON.stringify(user))
                 navigate('/')
@@ -48,19 +48,24 @@ export const ContextProvider = ({ children }) => {
             .then((response) => {
                 if (response.status === 200) {
                     console.log('User is logged in');
-                } else if (response.status === 401) {
-                    console.log('User is not logged in');
                 }
             })
             .catch(error => {
-                console.log(error);
+                if (error.response.status === 401) {
+                    setUser({ ...user, isAuthenticated: false })
+                    localStorage.removeItem('user')
+                    console.log('User is not logged in');
+                } else {
+                    console.log(error);
+                }
+
             });
     }
 
     const logout = async () => {
         axiosClient.post('/logout', { withCredentials: true })
             .then(() => {
-                setUser({...user, isAuthenticated: false})
+                setUser({ ...user, isAuthenticated: false })
                 localStorage.removeItem('user')
                 navigate('/')
             })

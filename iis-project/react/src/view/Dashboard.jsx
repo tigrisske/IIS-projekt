@@ -3,7 +3,6 @@ import React from "react"
 import axiosClient from '../axios-client';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useStateContext } from "../components/Context.jsx";
-import UsersList from "../components/UsersList";
 import AdminToDo from "../components/AdminToDo";
 
 export const Dashboard = () => {
@@ -26,7 +25,7 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <h1>Welcome to the Dashboard, {user.first_name}!</h1>
+            <h1>Welcome to the Dashboard, {user.name}!</h1>
             <button onClick={_user}>My profile</button>
             <button onClick={create_event}>Create Event</button>
             <button onClick={create_location}>Create Location</button>
@@ -35,7 +34,12 @@ export const Dashboard = () => {
             {user.role === 'admin' && (
                 <div>
                     <h2>Admin Dashboard Content</h2>
-                    <UsersList />
+                    <AdminToDo />
+                </div>
+            )}
+            {user.role === 'moderator' && (
+                <div>
+                    <h2>Moderator Dashboard Content</h2>
                     <AdminToDo />
                 </div>
             )}
@@ -43,7 +47,6 @@ export const Dashboard = () => {
                 <div>
                     <h2>Member Dashboard Content</h2>
                     {/* Add user-specific components here */}
-                    <UsersList />
                     <p>Hello</p>
                 </div>
             )}
