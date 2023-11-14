@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -12,7 +14,20 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = $this->getNestedCategories();
+    
+        return Response::json($categories);
+    }
+    
+    private function getNestedCategories($parentId = null)
+    {
+        $categories = Category::where('parent_id', $parentId)->get();
+    
+        foreach ($categories as $category) {
+            $category->children = $this->getNestedCategories($category->id);
+        }
+    
+        return $categories;
     }
 
     /**
@@ -21,10 +36,11 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $data = $request;//->validated();
+        $user = Auth::user();
         $event = Category::create([
             'name' => $data['name'],
             'parent_id' => $data['parent_id'],
-            'created_by' => $data['created_by'],
+            'created_by' => $user->id,
         ]);
 
 

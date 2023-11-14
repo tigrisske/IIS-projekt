@@ -7,6 +7,7 @@ import { CreateLocation } from "../../view/CreateLocation"
 import { CreateCategory } from "../../view/CreateCategory"
 import { SignUp } from "../../view/SignUp"
 import { MyEvents } from "../../view/myEvents"
+import {Event} from "../../view/Event"
 
 export const nav = [
     {
@@ -38,6 +39,14 @@ export const nav = [
         name: "Events",
         element: <Events />,
         isMenu: true,
+        min_role : 0,
+        protected_route: false
+    },
+{
+        path: "/event/:id",
+        name: "Event",
+        element: <Event/>,
+        isMenu: false,
         min_role : 0,
         protected_route: false
     },

@@ -6,8 +6,8 @@ import axiosClient from '../axios-client';
 function Event(props) {
     const navigate = useNavigate(); // Get the navigate function
 
-    function handleClick(props) {
-        navigate('/dashboard');
+    function handleClick() {
+        navigate(`/event/${props.id}`);
     }
 
     return (
@@ -16,6 +16,7 @@ function Event(props) {
             <p>Start date: {props.start_date}</p>
             <p>Capacity: {props.capacity}</p>
             <p>Description: {props.description}</p>
+            <p>Id {props.id}</p>
             <p>Location id(TODO):{props.location_id}</p>
         </div>
     );

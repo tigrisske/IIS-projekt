@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from '../axios-client.js';
-import Event from '../components/Event.jsx';
+import Event from '../components/EventItem.jsx';
 import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context.jsx';

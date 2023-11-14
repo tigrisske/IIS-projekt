@@ -1,11 +1,13 @@
 
-import React, { useState,useRef } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import axiosClient from '../axios-client';
 import { useStateContext } from '../components/Context';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimePicker from 'react-bootstrap-time-picker';
-import moment from 'moment';
+import { CategoryDropdown } from '../components/CategoryDropdown';
+import { LocationDropdown} from '../components/LocationDropdown';
+import { set } from 'date-fns';
 
 const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
@@ -16,12 +18,7 @@ const formatTime = (timeInSeconds) => {
     return formattedTime;
   };
 
-  const formatDate = (date) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const formattedDate = formatter.format(date);
-    return formattedDate;
-  };
+
   
 
 export const CreateEvent = () => {
@@ -38,6 +35,15 @@ export const CreateEvent = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const [isError, setIsError] = useState(false);
+
+
+    //category use states
+    const [category, setCategory] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [lastClickedCategoryId, setLastClickedCategoryId] = useState(null);
+
+    //location use states
+    const [selectedLocation, setSelectedLocation] = useState(null);
   
     const handleStartDateChange = (date) => {
       setStartDate(date);
@@ -46,6 +52,25 @@ export const CreateEvent = () => {
     const handleEndDateChange = (date) => {
       setEndDate(date);
     };
+
+    const handleLocationSelect = (selectedLocation) => {
+      
+      setSelectedLocation(selectedLocation);
+    }
+    
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const response = await axiosClient.get('/categories'); 
+          setCategories(response.data);
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        }
+      };
+  
+      fetchCategories();
+    }, [category]); //category in the dependency array so that the useEffect is called when the category is changed we make it null after creating a new category
+  
   
 
     const handleCreate = async (event) => {
@@ -77,8 +102,8 @@ export const CreateEvent = () => {
           end_date: `${formatedEndDate} ${formatTime(selectedEndTime)} `,
           capacity:  capacityRef.current.value,
           description: descriptionRef.current.value,
-          category_id: categoryIdRef.current.value,
-          location_id: locationIdRef.current.value,
+          category_id: category ? category.id : null,
+          location_id: selectedLocation ? selectedLocation.id : null
         };
       
         axiosClient.post('/createevent', request)
@@ -91,10 +116,11 @@ export const CreateEvent = () => {
             nameRef.current.value = '';
             capacityRef.current.value = '';
             descriptionRef.current.value = '';
-            categoryIdRef.current.value = '';
-            locationIdRef.current.value = '';
+            setCategory(null);
+            setSelectedLocation(null);
           })
           .catch(error => {
+            console.log("sem sme sa dostali");
             console.log('Error:', error);
             setIsError(true);
             setErrorMessage(`Error creating event! ${error.response.data.message}`);
@@ -174,21 +200,23 @@ export const CreateEvent = () => {
                 // value={credentials.password}
                 // onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
             />
-            <input
-                type="text"
-                ref={locationIdRef}
-                placeholder="location id"
-                // value={credentials.passwordConfirm}
-                // onChange={(e) => setCredentials({ ...credentials, passwordConfirm: e.target.value })}
-            />
-            <input
-                type="text"
-                ref={categoryIdRef}
-                placeholder="category id"
-                // value={credentials.passwordConfirm}
-                // onChange={(e) => setCredentials({ ...credentials, passwordConfirm: e.target.value })}
-            />
+            
+            <LocationDropdown onSelect={handleLocationSelect} />
+
             <button onClick={handleCreate}>Create</button>
+            <h2 style={{ fontWeight: 'bold' }}>Select a category:</h2>
+            <div>
+              {categories.map((category) => (
+                <CategoryDropdown
+                  key={category.id} //toto 
+                  category={category}
+                  selectedCategory={category}
+                  setCategory={setCategory}
+                  lastClickedCategoryId={lastClickedCategoryId}
+                  setLastClickedCategoryId={setLastClickedCategoryId}
+                />
+              ))}
+            </div>
             {errorMessage && <div style={{ color: isError ? 'red' : 'green' }}>{errorMessage}</div>}
         </div>
     );

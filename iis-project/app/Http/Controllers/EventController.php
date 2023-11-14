@@ -85,8 +85,10 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Event $event, $id)
     {
+        $event = Event::find($id);
+
         return response()->json([
             'event' => $event,
         ], 200);
