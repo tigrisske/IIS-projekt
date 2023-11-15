@@ -6,7 +6,7 @@ import { CreateEvent } from "../../view/CreateEvent"
 import { CreateLocation } from "../../view/CreateLocation"
 import { CreateCategory } from "../../view/CreateCategory"
 import { SignUp } from "../../view/SignUp"
-import { MyEvents } from "../../view/myEvents"
+import { MyEvents } from "../../view/MyEvents"
 import {Event} from "../../view/Event"
 
 export const nav = [

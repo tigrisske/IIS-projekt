@@ -25,7 +25,7 @@ class EventController extends Controller
         return response()->json($events);
     }
 
-    public function index2(Request $request)
+    public function index_created_events(Request $request)
 {
     $perPage = $request->input('perPage', 4);
     $page = $request->input('page', 1);
@@ -92,6 +92,27 @@ class EventController extends Controller
         return response()->json([
             'event' => $event,
         ], 200);
+    }
+
+    public function joinEvent(Event $event, $id){
+        $user = Auth::user();
+        $event = Event::find($id);
+
+        if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
+            return response()->json(['message' => 'User has already joined this event.'], 401);
+        }
+
+        if($event->joined_count >= $event->capacity){
+            return response()->json(['message' => 'Event is full.'], 401);
+        }
+        
+        $event->increment('joined_count', 1);
+
+        $eventuser = EventUser::create([
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+        ]);
+        return response()->json(['message' => 'User joined event.'], 200);
     }
 
     /**
