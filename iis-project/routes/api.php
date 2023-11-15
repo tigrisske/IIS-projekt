@@ -38,6 +38,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/createcategory', [CategoryController::class, 'create']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/event/{id}/join', [EventController::class, 'joinEvent']);
+    Route::post('/event/{id}/has_joined', [EventController::class, 'has_joined']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 

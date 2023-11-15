@@ -89,9 +89,15 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        return response()->json([
-            'event' => $event,
-        ], 200);
+        //if a authenticated user wants to display event, we check whether he has alraedy joined the event
+        if (Auth::check()) {
+            $user = Auth::user();
+            if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
+                return response()->json(['event' => $event, 'has_joined' => true], 200);
+            }
+        }
+
+        return response()->json(['event' => $event,'has_joint' => false], 200);
     }
 
     public function joinEvent(Event $event, $id){
