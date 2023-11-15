@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 
 export const Event = () => {
     const [event, setEvent] = useState(null);
+    const [location, setLocation] = useState(null); 
+
     const [isJoined, setIsJoined] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [isError, setIsError] = useState(false); // Add this state variable
@@ -16,6 +18,7 @@ export const Event = () => {
                     const response = await axiosClient.get(`/event/${id}`);
                     setEvent(response.data.event);
                     setIsJoined(response.data.has_joined);
+                    setLocation(response.data.location);
                     console.log(response.data);
                 }
             } catch (error) {
@@ -48,7 +51,9 @@ export const Event = () => {
                     <h1>{event.name}</h1> 
                     <p>Starting: {event.start_date}</p> 
                     <p>End: {event.end_date}</p> 
-                    {/* <p>{event.location}</p>  */}
+                    <p>Description: {event.description}</p>
+                    <p>Capacity:{event.joined_count}/{event.capacity}</p>
+                    <p>{location.name}</p> 
                 </div>
                 : 
                 <p>loading event data...</p>}</div>
