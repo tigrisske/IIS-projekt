@@ -62,7 +62,10 @@ class EventController extends Controller
             'category_id' => $data['category_id'],
             'location_id' => $data['location_id'],
             'is_confirmed' => 0,
-            'created_by' => $user->id
+            'created_by' => $user->id,
+            'pay_in_advance' => $data['pay_in_advance'],
+            // 'ticket_data' =>$data['ticket_data']
+
         ]);
 
 

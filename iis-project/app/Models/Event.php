@@ -18,7 +18,9 @@ class Event extends Model
         'category_id', 
         'location_id', 
         'is_confirmed',
-        'created_by'
+        'created_by',
+        'pay_in_advance',
+        'ticket_data'
     ];
 
     public function images()

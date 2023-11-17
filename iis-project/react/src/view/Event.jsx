@@ -21,6 +21,7 @@ export const Event = () => {
                     setEvent(response.data.event);
                     setIsJoined(response.data.has_joined);
                     setLocation(response.data.location);
+                    console.log(response.data);
                 }
             } catch (error) {
                 console.log(`Error fetching event! ${error.response.data.message}`);
@@ -67,6 +68,7 @@ export const Event = () => {
                     <p>End: {event.end_date}</p>
                     <p>Description: {event.description}</p>
                     <p>Capacity:{event.joined_count}/{event.capacity}</p>
+                    {event.pay_in_advance ?  ( <p> Requires payment in advance.</p>) : null   }
                     <p>{location.name}</p>
                     <div>
                         <h3>Event Reviews</h3>

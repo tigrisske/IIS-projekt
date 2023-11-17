@@ -29,6 +29,7 @@ class EventRequest extends FormRequest
             'description' => 'required|string|max:1100',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',
+            'pay_in_advance' => 'required',
         ];
     }
 }
