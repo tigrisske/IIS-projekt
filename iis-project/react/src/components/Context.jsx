@@ -106,7 +106,9 @@ export const ContextProvider = ({ children }) => {
             setNotification,
         }}>
             <RenderMenu />
-            <RenderRoutes />
+            <main>
+                <RenderRoutes />
+            </main>
         </StateContext.Provider>
     );
 }

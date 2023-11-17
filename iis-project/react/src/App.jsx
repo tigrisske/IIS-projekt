@@ -4,11 +4,9 @@ import { ContextProvider } from './components/Context'
 
 function App() {
     return (
-        <div>
-            <BrowserRouter>
-                <ContextProvider />
-            </BrowserRouter>
-        </div>
+        <BrowserRouter>
+            <ContextProvider />
+        </BrowserRouter>
     )
 }
 

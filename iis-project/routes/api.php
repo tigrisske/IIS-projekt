@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReviewEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,11 @@ Route::middleware(['web'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/signin', [AuthController::class, 'register']);
     Route::post('/auth', [AuthController::class, 'auth']);
-    Route::get('/user', [UserController::class, 'getUser']);
 
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event/{id}', [EventController::class, 'show']);
+    Route::get('/event/{id}/reviews', [ReviewEventController::class, 'getReviews']);
     Route::get('/locations', [LocationController::class, 'index']);
 
 });
@@ -46,9 +47,11 @@ Route::middleware(['web', 'auth'])->group(function () {
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    Route::get('/user/{user}', [UserController::class, 'show']);
+    Route::delete('/user/{user}', [UserController::class, 'destroy']);
+    Route::put('/user/{id}/update-role', [UserController::class, 'updateRole']);
     Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
+    Route::post('/confirm_event', [EventController::class, 'confirmEvent']);
 });
 
 Route::middleware('auth:sanctum')->get('/check-auth', function (Request $request) {

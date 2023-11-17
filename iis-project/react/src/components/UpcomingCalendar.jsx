@@ -33,7 +33,7 @@ export const UpcomingCalendar = () => {
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"
-                weekends={false}
+                weekends={true}
                 events={myEventsList}
             />
         </div>

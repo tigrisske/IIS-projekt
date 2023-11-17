@@ -8,7 +8,8 @@ export const LocationDropdown = ({ onSelect }) => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await axiosClient.get('/locations'); // Replace with your actual API endpoint
+        const response = await axiosClient.get('/locations');
+        console.log(response.data)
         setLocations(response.data);
       } catch (error) {
         console.error('Error fetching locations:', error);
@@ -32,7 +33,7 @@ export const LocationDropdown = ({ onSelect }) => {
         <option value="">Select a location</option>
         {locations.map((location) => (
           <option key={location.id} value={location.id}>
-            {location.name}
+            {location.name} (capacity: {location.capacity})
           </option>
         ))}
       </select>

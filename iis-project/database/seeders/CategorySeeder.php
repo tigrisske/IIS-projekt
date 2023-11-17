@@ -23,6 +23,16 @@ class CategorySeeder extends Seeder
                 'name'=> 'Kultura',
                 'created_by'=> 1,
                 'confirmed_by'=> 1,
+            ],
+            [
+                'name'=> 'Politika',
+                'created_by'=> 1,
+                'confirmed_by'=> 1,
+            ],
+            [
+                'name'=> 'Hudba',
+                'created_by'=> 1,
+                'confirmed_by'=> 1,
             ]
             ];
 

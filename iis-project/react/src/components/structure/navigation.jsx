@@ -2,6 +2,7 @@ import { Dashboard } from "../../view/Dashboard"
 import { Home } from "../../view/Home"
 import { Login } from "../../view/Login"
 import { Events } from '../../view/Events'
+import UserDetail from "../../view/User"
 import UsersBoard from "../UsersBoard"
 import UpcomingCalendar from "../UpcomingCalendar"
 import { CreateEvent } from "../../view/CreateEvent"
@@ -45,7 +46,7 @@ export const nav = [
         protected_route: false
     },
 {
-        path: "/event/:id",
+        path: "/event/:eventId",
         name: "Event",
         element: <Event/>,
         isMenu: false,
@@ -60,6 +61,22 @@ export const nav = [
         protected_route: true,
         min_role: 'admin'
     },
+    {
+        path: "/user/:userId",
+        name: "UserDetail",
+        element: <UserDetail />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'admin'
+    },
+    // {
+    //     path: "/profile",
+    //     name: "Profile",
+    //     element: <Profile />,
+    //     isMenu: true,
+    //     protected_route: true,
+    //     min_role: 'member'
+    // },
     {
         path: "/calendar",
         name: "UpcomingCalendar",
@@ -81,7 +98,7 @@ export const nav = [
         name: "Create Event",
         element: <CreateEvent />,
         isMenu: true,
-        min_role : 0,
+        min_role : 'member',
         protected_route: true
     },
     {
@@ -89,7 +106,7 @@ export const nav = [
         name: "Create Location",
         element: <CreateLocation />,
         isMenu: true,
-        min_role : 0,
+        min_role : 'member',
         protected_route: true
     },
     {
@@ -97,7 +114,7 @@ export const nav = [
         name: "Create Category",
         element: <CreateCategory/>,
         isMenu: true,
-        min_role : 0,
+        min_role : 'member',
         protected_route: true
     },
     {
@@ -105,9 +122,8 @@ export const nav = [
         name: "Dashboard",
         element: <Dashboard />,
         isMenu: true,
-        min_role : 0,
         protected_route: true,
-        min_role: 'member'
+        min_role: 'moderator'
     },
     {
         path: '*',

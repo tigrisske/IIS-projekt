@@ -27,9 +27,9 @@ class EventController extends Controller
     }
 
     public function index_created_events(Request $request)
-{
-    $perPage = $request->input('perPage', 4);
-    $page = $request->input('page', 1);
+    {
+        $perPage = $request->input('perPage', 4);
+        $page = $request->input('page', 1);
 
         $user = Auth::user(); // Get the logged-in user
 
@@ -91,33 +91,36 @@ class EventController extends Controller
         $event = Event::find($id);
         //get the location name based od event->location_id
         $location = Location::find($event->location_id);
-  
+
         //if a authenticated user wants to display event, we check whether he has alraedy joined the event
         if (Auth::check()) {
             $user = Auth::user();
-            if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
-                return response()->json(['event' => $event,
-                                         'has_joined' => true,
-                                         'location' => $location], 200);
+            if (EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
+                return response()->json([
+                    'event' => $event,
+                    'has_joined' => true,
+                    'location' => $location
+                ], 200);
 
             }
         }
 
-        return response()->json(['event' => $event,'has_joint' => false, 'location' => $location], 200);
+        return response()->json(['event' => $event, 'has_joint' => false, 'location' => $location], 200);
     }
 
-    public function joinEvent(Event $event, $id){
+    public function joinEvent(Event $event, $id)
+    {
         $user = Auth::user();
         $event = Event::find($id);
 
-        if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
+        if (EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
             return response()->json(['message' => 'User has already joined this event.'], 401);
         }
 
-        if($event->joined_count >= $event->capacity){
+        if ($event->joined_count >= $event->capacity) {
             return response()->json(['message' => 'Event is full.'], 401);
         }
-        
+
         $event->increment('joined_count', 1);
 
         $eventuser = EventUser::create([
@@ -126,6 +129,18 @@ class EventController extends Controller
         ]);
         return response()->json(['message' => 'User joined event.'], 200);
     }
+
+    /*
+     * Confirm event, get event id from post
+     */
+    public function confirmEvent(Request $request)
+    {
+        $event = Event::find($request->event_id);
+        $event->is_confirmed = true;
+        $event->save();
+        return response()->json(['message' => 'Event confirmed.'], 200);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

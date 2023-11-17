@@ -27,13 +27,9 @@ export const Dashboard = () => {
         <div>
             <h1>Welcome to the Dashboard, {user.name}!</h1>
             <button onClick={_user}>My profile</button>
-            <button onClick={create_event}>Create Event</button>
-            <button onClick={create_location}>Create Location</button>
-            <button onClick={create_category}>Create Category</button>
             <button onClick={checkLogin}>Verify Login</button>
             {user.role === 'admin' && (
                 <div>
-                    <h2>Admin Dashboard Content</h2>
                     <AdminToDo />
                 </div>
             )}

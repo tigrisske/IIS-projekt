@@ -48,6 +48,20 @@ class UserController extends Controller
 
         return response()->json($users);
     }
+
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id); // Fetch the user by ID
+
+        // Update the user's role attribute based on the request
+        $user->role = $request->input('role');
+        $user->save();
+
+        // Optionally, return a response indicating success or failure
+        return response()->json(['message' => 'User role updated successfully']);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
