@@ -26,6 +26,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event/{id}', [EventController::class, 'show']);
     Route::get('/locations', [LocationController::class, 'index']);
 
@@ -36,9 +37,11 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/createlocation', [LocationController::class, 'create']);
     Route::post('/createcategory', [CategoryController::class, 'create']);
     Route::get('/categories', [CategoryController::class, 'index']);
+    Route::post('/event/{id}/join', [EventController::class, 'joinEvent']);
+    Route::post('/event/{id}/has_joined', [EventController::class, 'has_joined']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/myupcomingevents', [UserController::class, 'getUpcomingEvents']);
-    Route::get('/myevents', [EventController::class, 'getUserEvents']);
+    Route::get('/myevents', [EventController::class, 'index_created_events']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {

@@ -3,7 +3,7 @@ import { nav } from "./navigation";
 import { useStateContext } from "../Context";
 
 function compareRoles(user_role, min_role) {
-    const roleOrder = ['user', 'moderator', 'admin'];
+    const roleOrder = ['member', 'moderator', 'admin'];
     return roleOrder.indexOf(user_role) >= roleOrder.indexOf(min_role);
 }
 

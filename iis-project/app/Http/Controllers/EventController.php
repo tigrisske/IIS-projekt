@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventUser;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 
@@ -25,13 +26,10 @@ class EventController extends Controller
         return response()->json($events);
     }
 
-    /**
-     * Get the events that the are under user's management.
-     */
-    public function getUserEvents(Request $request)
-    {
-        $perPage = $request->input('perPage', 4);
-        $page = $request->input('page', 1);
+    public function index_created_events(Request $request)
+{
+    $perPage = $request->input('perPage', 4);
+    $page = $request->input('page', 1);
 
         $user = Auth::user(); // Get the logged-in user
 
@@ -91,10 +89,42 @@ class EventController extends Controller
     public function show(Event $event, $id)
     {
         $event = Event::find($id);
+        //get the location name based od event->location_id
+        $location = Location::find($event->location_id);
+  
+        //if a authenticated user wants to display event, we check whether he has alraedy joined the event
+        if (Auth::check()) {
+            $user = Auth::user();
+            if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
+                return response()->json(['event' => $event,
+                                         'has_joined' => true,
+                                         'location' => $location], 200);
 
-        return response()->json([
-            'event' => $event,
-        ], 200);
+            }
+        }
+
+        return response()->json(['event' => $event,'has_joint' => false, 'location' => $location], 200);
+    }
+
+    public function joinEvent(Event $event, $id){
+        $user = Auth::user();
+        $event = Event::find($id);
+
+        if(EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()){
+            return response()->json(['message' => 'User has already joined this event.'], 401);
+        }
+
+        if($event->joined_count >= $event->capacity){
+            return response()->json(['message' => 'Event is full.'], 401);
+        }
+        
+        $event->increment('joined_count', 1);
+
+        $eventuser = EventUser::create([
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+        ]);
+        return response()->json(['message' => 'User joined event.'], 200);
     }
 
     /**
