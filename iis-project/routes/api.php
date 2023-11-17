@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ReviewEventController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event/{id}', [EventController::class, 'show']);
-    Route::get('/event/{id}/reviews', [ReviewEventController::class, 'getReviews']);
+    Route::get('/event/{id}/reviews', [EventController::class, 'getReviews']);
     Route::get('/locations', [LocationController::class, 'index']);
 
 });
@@ -43,12 +43,17 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/myupcomingevents', [UserController::class, 'getUpcomingEvents']);
     Route::get('/myevents', [EventController::class, 'index_created_events']);
+    Route::post('/event/{id}/reviews', [EventController::class, 'createReview']);
+});
+
+Route::middleware(['web','auth', 'role:moderator'])->group(function () {
+    Route::delete('/review/{id}', [ReviewController::class,'destroy']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
-    Route::get('/user/{user}', [UserController::class, 'show']);
-    Route::delete('/user/{user}', [UserController::class, 'destroy']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
+    Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::put('/user/{id}/update-role', [UserController::class, 'updateRole']);
     Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
     Route::post('/confirm_event', [EventController::class, 'confirmEvent']);

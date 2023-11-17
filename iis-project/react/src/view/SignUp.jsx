@@ -4,8 +4,7 @@ import {useStateContext} from "../components/Context.jsx";
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export const SignUp = () => {
-    const navigate = useNavigate();
-    const { setUser, setToken } = useStateContext()
+    const { signup } = useStateContext()
     const nameRef = useRef();
     const lastNameRef = useRef();
     const emailRef = useRef();
@@ -20,15 +19,8 @@ export const SignUp = () => {
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         };
-        axiosClient.post('/signin', request)
-            .then((response) => {
-                setToken('true');
-                console.log(response);
-                navigate('/dashboard');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        signup(request);
+
     }
 
     return (

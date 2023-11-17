@@ -92,7 +92,7 @@ button:hover {
 }
 
 .delete-btn {
-    background-color: orange;
+    background-color: #f44336;
     color: white;
     border: none;
 }
@@ -109,12 +109,12 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-.horizontal-buttons button:first-child{
+.horizontal-buttons button:first-child {
     border-radius: 8px 0px 0px 8px;
 
 }
 
-.horizontal-buttons button:last-child{
+.horizontal-buttons button:last-child {
     border-radius: 0px 8px 8px 0px;
 }
 
@@ -161,8 +161,18 @@ nav {
     color: #45a049;
 }
 
+textarea {
+    border-radius: 4px;
+    padding: 10px;
+    margin: 20px 0;
+    width: 100%
+}
+
 .centered-600px-container {
-    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 600px;
     margin: 20px auto;
 }
 
@@ -178,8 +188,30 @@ nav {
     justify-content: flex-end;
 }
 
+.space-between-row-flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .three-column-grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 20px;
+}
+
+.stars {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
 }

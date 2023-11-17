@@ -21,15 +21,15 @@ class AuthController extends Controller
             $request->session()->regenerate();
             // $session_id = $session->getId();
             $user = User::find(Auth::id());
-            return response()->json(['message' => 'Authentication successful', 'user' => $user], 200);//->headers('SESSION_ID', $session_id);
+            return response()->json(['message' => 'Authentication successful', 'user' => $user], 200); //->headers('SESSION_ID', $session_id);
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
     public function register(SignupRequest $request)
     {
         $data = $request->validated();
-        $user = User::create([
+        $newUser = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
@@ -37,17 +37,18 @@ class AuthController extends Controller
         ]);
 
         // User will be logged in after registration
-        Auth::login($user);
+        Auth::login($newUser);
+        $user = User::find(Auth::id());
 
-        return response()->json(['message' => 'Account created and logged in']);
+        return response()->json(['message' => 'Account created and logged in!', 'user' => $user], 200);
     }
 
     public function logout(Request $request)
     {
         logger($request->session()->all());
         // Check if the user is authenticated
-        
-        
+
+
         // $request->session()->invalidate();
         if (Auth::check()) {
             // Log out the authenticated user
@@ -59,7 +60,7 @@ class AuthController extends Controller
         // User is not authenticated
         return response()->json(['message' => 'User not authenticated'], 401);
     }
-    
+
     public function auth(Request $request)
     {
         if (Auth::check()) {
