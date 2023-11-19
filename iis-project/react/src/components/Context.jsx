@@ -14,7 +14,7 @@ const StateContext = createContext({
 })
 
 export const ContextProvider = ({ children }) => {
-    const [user, setUser] = useState({ name: undefined, role: undefined, isAuthenticated: false });
+    const [user, setUser] = useState({ name: undefined, id: undefined, role: undefined, isAuthenticated: false });
     const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
     const [notification, _setNotification] = useState('');
     const navigate = useNavigate();
@@ -34,7 +34,8 @@ export const ContextProvider = ({ children }) => {
                 console.log('Login response');
                 console.log(response);
                 let data = response.data.user;
-                let user = { name: data.first_name + " " + data.last_name, role: data.role, isAuthenticated: true }
+                let user = { name: data.first_name + " " + data.last_name, id: data.id, role: data.role, isAuthenticated: true }
+                console.log(user);
                 setUser(user);
                 localStorage.setItem('user', JSON.stringify(user))
                 navigate('/')

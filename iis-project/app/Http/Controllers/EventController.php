@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventUser;
+use App\Models\Ticket;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
+use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +19,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 10); // Number of events per page, default is 10
+        $perPage = $request->input('perPage', 3); // Number of events per page, default is 10
         $page = $request->input('page', 1); // Current page, default is 1
 
         $events = Event::orderBy('end_date', 'asc')
@@ -28,7 +30,7 @@ class EventController extends Controller
 
     public function index_created_events(Request $request)
     {
-        $perPage = $request->input('perPage', 4);
+        $perPage = $request->input('perPage', 3);
         $page = $request->input('page', 1);
 
         $user = Auth::user(); // Get the logged-in user
@@ -68,8 +70,40 @@ class EventController extends Controller
 
         ]);
 
+        //destructure ticket_data
+        $ticket_data = $data['ticket_data'];
 
-        return response()->json(['message' => 'Event created and logged in', 200]);
+        $tickets_total = 0;
+        //sum of ticket amounts
+        for ($i = 0; $i < count($ticket_data); $i++) {
+            $tickets_total += $ticket_data[$i]['amount'];
+        }
+
+        if ($tickets_total > $event->capacity) {
+            return response()->json(['message' => 'Total amount of tickets is greater than event capacity.'], 401);
+        }
+        
+
+        
+        //now we create tickets in db
+        for ($i = 0; $i < count($ticket_data); $i++) {
+            $ticket = Ticket::create([
+                'title' => $ticket_data[$i]['name'],
+                'price' => $ticket_data[$i]['price'],
+                'amount' => $ticket_data[$i]['amount'],
+                'event_id' => $event->id,
+            ]);
+        }
+
+
+
+        //debug
+        $count = count($ticket_data);
+
+
+
+
+        return response()->json(['message' => 'Event created and logged in', 'num of tickets' => $count, 200]);
     }
 
     /**
@@ -85,6 +119,21 @@ class EventController extends Controller
         return response()->json(['count' => $count]);
     }
 
+    public function get_users($id)
+    {
+        $event = Event::find($id);
+    
+        // Get the user IDs that joined the event and are confirmed
+        $userIds = EventUser::where('event_id', $event->id)
+                            ->where('confirmed', false)
+                            ->pluck('user_id');
+    
+        // Get the actual user records from the users table based on user IDs
+        $users = User::whereIn('id', $userIds)->get();
+    
+        return response()->json(['users' => $users], 200);
+    }
+    
 
     /**
      * Display the specified resource.
@@ -97,40 +146,58 @@ class EventController extends Controller
 
         //if a authenticated user wants to display event, we check whether he has alraedy joined the event
         if (Auth::check()) {
+            $tickets = Ticket::where('event_id', $event->id)->get();
             $user = Auth::user();
-            if (EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
-                return response()->json([
-                    'event' => $event,
-                    'has_joined' => true,
-                    'location' => $location
-                ], 200);
-
-            }
+            $has_joined = EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists();
+            return response()->json([
+                'event' => $event,
+                'has_joined' => $has_joined,
+                'location' => $location,
+                'tickets' => $tickets,
+            ], 200);
         }
 
         return response()->json(['event' => $event, 'has_joint' => false, 'location' => $location], 200);
     }
 
-    public function joinEvent(Event $event, $id)
+    public function joinEvent(Event $event, $eventId, $ticketId)
     {
         $user = Auth::user();
-        $event = Event::find($id);
+        $event = Event::find($eventId);
 
+        //cannot join if already joined
         if (EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
             return response()->json(['message' => 'User has already joined this event.'], 401);
         }
 
+        //cannot join if full
         if ($event->joined_count >= $event->capacity) {
             return response()->json(['message' => 'Event is full.'], 401);
         }
 
-        $event->increment('joined_count', 1);
-
-        $eventuser = EventUser::create([
+        //when the event is does not need a payment in advance, we can join the event
+        if (!$event->pay_in_advance) {
+            $eventuser = EventUser::create([
             'user_id' => $user->id,
             'event_id' => $event->id,
-        ]);
-        return response()->json(['message' => 'User joined event.'], 200);
+            'confirmed' => true,
+            'ticket_id' => $ticketId,
+            ]);
+            $event->increment('joined_count', 1);
+            return response()->json(['message' => 'User joined event.'], 200);
+        }
+        //when the event needs a payment in advance, we need to send a request to join the event
+        else {
+            $eventuser = EventUser::create([
+                'user_id' => $user->id,
+                'event_id' => $event->id,
+                'confirmed' => false,
+                'ticket_id' => $ticketId,
+            ]);
+            return response()->json(['message' => 'Join request sent succesfully! You will join event after you payment was verfied.'], 200);
+        }
+
+        // return response()->json(['message' => 'Join request sent succesfully! You will join event after you payment was verfied.'], 200);
     }
 
     /*

@@ -13,7 +13,9 @@ class EventUser extends Model
 
     protected $fillable = [
         'event_id',
-        'user_id'
+        'user_id',  
+        'ticket_id',
+        'confirmed'
     ];
     
     public function event()
