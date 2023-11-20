@@ -211,12 +211,47 @@ class EventController extends Controller
             return response()->json(['message' => 'Event not found.'], 401);
         }
         $user_event_row= EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
-        if(!$user){
+        if(!$user_event_row){
             return response()->json(['message' => 'User not found.'], 401);
         }
         $user_event_row->confirmed = true;
         $user_event_row-> save();
         return response()->json(['message' => 'User approved.'], 200);
+    }
+
+    public function approveAllUsers(Event $event, $eventId){
+        $event = Event::find($eventId);
+        if(!$event){
+            return response()->json(['message' => 'Event not found.'], 401);
+        }
+        $user_event_rows= EventUser::where('event_id', $eventId)->get();
+        if(!$user_event_rows){
+            return response()->json(['message' => 'Users not found.'], 401);
+        }
+        EventUser::where('event_id', $eventId)->update(['confirmed' => true]);
+        return response()->json(['message' => 'All users approved.'], 200);
+    }
+
+    public function declineUser(Event $event, $eventId, $userId)
+    {
+        $event = Event::find($eventId);
+        if(!$event){
+            return response()->json(['message' => 'Event not found.'], 401);
+        }
+        $user_event_row= EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
+        if(!$user_event_row){
+            return response()->json(['message' => 'User not found.'], 401);
+        }
+
+        //we increment the amount of tickets back, as the user got rejected 
+        $ticketId = $user_event_row->ticket_id;
+        $ticket = Ticket::find($ticketId);
+        $ticket->increment('amount');
+
+        //delete this row from db
+        $user_event_row->delete();
+        // $user_event_row-> save();
+        return response()->json(['message' => 'User declined.'], 200);
     }
 
     /*

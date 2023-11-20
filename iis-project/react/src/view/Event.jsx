@@ -3,6 +3,7 @@ import axiosClient from '../axios-client';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context';
 import { set } from 'date-fns';
+import axios from 'axios';
 
 export const Event = () => {
     const [event, setEvent] = useState(null);
@@ -16,6 +17,7 @@ export const Event = () => {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [isMyEvent, setIsMyEvent] = useState(undefined); 
     const { user } = useStateContext();
+    const [key, setKey] = useState(0);
 
 
     const { eventId } = useParams();
@@ -42,7 +44,7 @@ export const Event = () => {
         };
 
         fetchData();
-    }, [eventId, isJoined,user]);
+    }, [eventId, isJoined,user, key]);
 
 
     const [eventUsers, setEventUsers] = useState([]); // State to store the users who have sent a login request
@@ -61,7 +63,7 @@ export const Event = () => {
         };
 
         fetchEventUsers();
-    }, [eventId, event]);
+    }, [eventId, event, key]);
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -102,33 +104,45 @@ export const Event = () => {
         setSelectedTicket(ticket);
     };
     const handleApprove = async (userId) => {
+        setKey(key + 1);
         console.log('Request payload:', { userId, eventId });
         try {
             //confirming user
             const approveResponse = await axiosClient.post(`/event/${eventId}/approve/user/${userId}`);
             setIsError(false);
             setErrorMessage(`User approved!`);
-            // //decrenmenting number of tickets
-            // const ticketsResponse = await axiosClient.post(`/event/${eventId}/decrement-ticket/${selectedTicket.id}`);
-            // if (ticketsResponse.data.success) {
-            //     console.log(`Number of available tickets decremented for ticket ${selectedTicket.id}.`);
-            //     setIsError(false);
-            // } else {
-            //     setIsError(true);
-            //     console.error('Decrementing tickets failed:', ticketsResponse.data.message);
-            // }
+          
         } catch (error) {
             setIsError(true);
             setErrorMessage(`Error approving user! ${error.response.data.message}`);
         }
     };
 
-    const handleDecline = (userId) => {
-        console.log(`Declining user ${userId}`);
+    const handleDecline = async (userId) => {
+        setKey(key + 1);
+        try {
+            //confirming user
+            const declineResponse = await axiosClient.post(`/event/${eventId}/decline/user/${userId}`);
+            setIsError(false);
+            setErrorMessage(`User declined!`);
+            
+        } catch (error) {
+            setIsError(true);
+            setErrorMessage(`Error declining user! ${error.response.data.message}`);
+        }
     };
 
     const handleApproveAll = () => {            // Check if the request to decrement tickets was successful
-        console.log('Approving all users');
+        setKey(key + 1);
+        axiosClient.post(`/event/${eventId}/approve/users`)
+        .then((response) => {
+            console.log(response);
+            setIsError(false);
+            setErrorMessage(`All users approved!`);
+        })
+        .catch((error) => {
+            console.log("marek toto je error");
+            console.log(error);});
     };
 
     return (
@@ -202,7 +216,7 @@ export const Event = () => {
       {(user.id === event.created_by) && eventUsers.length > 0 && (
                 <div>
                     <h3>Users who have sent a login request:</h3>
-                    <button onClick={handleApproveAll}>Approve All</button>
+                    <button onClick={() => handleApproveAll()}>Approve All</button>
                     <ul>
                         {eventUsers.map((user) => (
                             <li key={user.id}>

@@ -43,7 +43,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/event/{eventId}/users', [EventController::class, 'get_users']);
     Route::post('/event/{eventId}/join/ticket/{ticketId}', [EventController::class, 'joinEvent']);
 
+    Route::post('/event/{eventId}/approve/users', [EventController::class, 'approveAllUsers']);
     Route::post('/event/{eventId}/approve/user/{userId}', [EventController::class, 'approveUser']);
+    Route::post('/event/{eventId}/decline/user/{userId}', [EventController::class, 'declineUser']);
 
     Route::post('/event/{id}/has_joined', [EventController::class, 'has_joined']);
     Route::post('/logout', [AuthController::class, 'logout']);
