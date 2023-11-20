@@ -47,6 +47,13 @@ class TicketController extends Controller
         //
     }
 
+    public function decrement(Ticket $ticket)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        $ticket->decrement('amount');
+        return response()->json(['message' => 'number of tickets decreased.'], 200);
+    }
+
     /**
      * Update the specified resource in storage.
      */

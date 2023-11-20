@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReviewEventController;
+use App\Http\Controllers\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,9 @@ Route::middleware(['web', 'auth'])->group(function () {
 
     Route::get('/event/{eventId}/users', [EventController::class, 'get_users']);
     Route::post('/event/{eventId}/join/ticket/{ticketId}', [EventController::class, 'joinEvent']);
+
+    Route::post('/event/{eventId}/approve/user/{userId}', [EventController::class, 'approveUser']);
+
     Route::post('/event/{id}/has_joined', [EventController::class, 'has_joined']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/myupcomingevents', [UserController::class, 'getUpcomingEvents']);

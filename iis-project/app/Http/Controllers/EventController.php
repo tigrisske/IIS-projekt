@@ -194,16 +194,35 @@ class EventController extends Controller
                 'confirmed' => false,
                 'ticket_id' => $ticketId,
             ]);
+
+            //we decrement the amount of available tickets as the user declared he paid for the ticket
+            $ticket = Ticket::find($ticketId);
+            $ticket->decrement('amount');
             return response()->json(['message' => 'Join request sent succesfully! You will join event after you payment was verfied.'], 200);
         }
 
         // return response()->json(['message' => 'Join request sent succesfully! You will join event after you payment was verfied.'], 200);
     }
 
+    public function approveUser(Event $event, $eventId, $userId)
+    {
+        $event = Event::find($eventId);
+        if(!$event){
+            return response()->json(['message' => 'Event not found.'], 401);
+        }
+        $user_event_row= EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
+        if(!$user){
+            return response()->json(['message' => 'User not found.'], 401);
+        }
+        $user_event_row->confirmed = true;
+        $user_event_row-> save();
+        return response()->json(['message' => 'User approved.'], 200);
+    }
+
     /*
      * Confirm event, get event id from post
      */
-    public function confirmEvent(Request $request)
+    public function confirmEvent(Event $request)
     {
         $event = Event::find($request->event_id);
         $event->is_confirmed = true;
