@@ -5,11 +5,11 @@ import { useStateContext } from '../components/Context';
 import { set } from 'date-fns';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Reviews from '../components/Reviews';
 
 export const Event = () => {
     const [event, setEvent] = useState(null);
     const [location, setLocation] = useState(null);
-    const [reviews, setReviews] = useState([]);
     const [isJoined, setIsJoined] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [isError, setIsError] = useState(false);
@@ -66,19 +66,6 @@ export const Event = () => {
 
         fetchEventUsers();
     }, [eventId, event, key]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const response = await axiosClient.get(`/event/${eventId}/reviews?page=${currentPage}`);
-                setReviews(response.data.reviews);
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
-            }
-        };
-
-        fetchReviews();
-    }, [eventId, currentPage]);
 
     const handleJoin = async (id) => {
         try {
@@ -165,7 +152,7 @@ export const Event = () => {
         
     }
     return (
-        <div className='centered-600px-container ' style={{ textAlign: 'center' }}>
+        <div className='centered-600px-container ' style={{ textAlign: 'center'  }}>
             {event ? (
                 <div>
               
@@ -196,34 +183,11 @@ export const Event = () => {
                             ))}
                         </select>
                     </div>
-                    <div>
-                        <h3>Event Reviews</h3>
-                        {reviews.length > 0 ? (
-                            <div>
-                                <ul>
-                                    {reviews.map((review) => (
-                                        <li key={review.id}>
-                                            <strong>User:</strong> {review.user_name} <br />
-                                            <strong>Rating:</strong> {review.rating} <br />
-                                            <strong>Comment:</strong> {review.comment}
-                                        </li>
-                                    ))}
-                                </ul>
-                                {/* Pagination buttons */}
-                                <div>
-                                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                                        Previous
-                                    </button>
-                                    <span>Page {currentPage}</span>
-                                    <button onClick={() => handlePageChange(currentPage + 1)}>
-                                        Next
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <p>No reviews available for this event.</p>
-                        )}
-                    </div>
+                    {new Date(event.start_date) < new Date() ? (
+                        <Reviews eventId={eventId} />
+                    ) : (
+                        <div></div>
+                    )}
                 </div>
             ) : (
                 <p>Loading event data...</p>

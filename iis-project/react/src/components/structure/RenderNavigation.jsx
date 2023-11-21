@@ -2,12 +2,8 @@ import { Link, Route, Routes } from "react-router-dom";
 import { nav } from "./navigation";
 import { useStateContext } from "../Context";
 
-function compareRoles(user_role, min_role) {
-    const roleOrder = ['member', 'moderator', 'admin'];
-    return roleOrder.indexOf(user_role) >= roleOrder.indexOf(min_role);
-}
-
 export const RenderRoutes = () => {
+    const {compareRoles} = useStateContext();
 
     const { user } = useStateContext();
 
@@ -32,7 +28,7 @@ const MenuItem = ({ route }) => (
 );
 
 export const RenderMenu = () => {
-    const { user, logout } = useStateContext();
+    const { user, logout, compareRoles } = useStateContext();
 
     return (
         <header>

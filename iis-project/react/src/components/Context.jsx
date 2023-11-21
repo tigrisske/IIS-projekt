@@ -2,15 +2,12 @@ import { createContext, useContext, useState, useEffect } from "react";
 import axiosClient from '../axios-client';
 import { useNavigate } from 'react-router-dom';
 import { RenderMenu, RenderRoutes } from "./structure/RenderNavigation";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StateContext = createContext({
     user: null,
-    token: null,
-    notification: null,
     setUser: () => { },
-    setToken: () => { },
-    setNotification: () => { }
 })
 
 export const ContextProvider = ({ children }) => {
@@ -18,6 +15,10 @@ export const ContextProvider = ({ children }) => {
     const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
     const [notification, _setNotification] = useState('');
     const navigate = useNavigate();
+
+    const setNotification = (message, type = 'info') => {
+        toast[type](message, { autoClose: 2000 }); // Use toast function based on the notification type
+    };
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -39,8 +40,26 @@ export const ContextProvider = ({ children }) => {
                 setUser(user);
                 localStorage.setItem('user', JSON.stringify(user))
                 navigate('/')
+                setNotification('Login successful!', 'success');
             }).catch(error => {
+                setNotification('Login failed! ' + error.response.data.message, 'error');
+            });
+    }
+
+    const signup = async (request) => {
+        axiosClient.post('/signin', request)
+            .then((response) => {
+                console.log(response);
+                let data = response.data.user;
+                let user = { name: data.first_name + " " + data.last_name, role: data.role, isAuthenticated: true }
+                setUser(user);
+                localStorage.setItem('user', JSON.stringify(user))
+                navigate('/');
+                setNotification('Signup successful!', 'success');
+            })
+            .catch(error => {
                 console.log(error);
+                setNotification('Signup failed! ' + error.response.data.message, 'error');
             });
     }
 
@@ -48,16 +67,16 @@ export const ContextProvider = ({ children }) => {
         axiosClient.post('/auth', { withCredentials: true })
             .then((response) => {
                 if (response.status === 200) {
-                    console.log('User is logged in');
+                    setNotification('You are logged in!', 'success');
                 }
             })
             .catch(error => {
                 if (error.response.status === 401) {
                     setUser({ ...user, isAuthenticated: false })
                     localStorage.removeItem('user')
-                    console.log('User is not logged in');
+                    setNotification('You are not logged in!', 'error');
                 } else {
-                    console.log(error);
+                    setNotification('Error checking login status! ' + error.response.data.message, 'error');
                 }
 
             });
@@ -69,29 +88,16 @@ export const ContextProvider = ({ children }) => {
                 setUser({ ...user, isAuthenticated: false })
                 localStorage.removeItem('user')
                 navigate('/')
+                setNotification('Logout successful!', 'success');
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
-    const setToken = (token) => {
-        _setToken(token);
-        if (token) {
-            // Save user data to localStorage as a JSON string
-            localStorage.setItem('ACCESS_TOKEN', token);
-        } else {
-            // Clear the user data from localStorage
-            localStorage.removeItem('ACCESS_TOKEN');
-        }
-    }
-
-    const setNotification = message => {
-        _setNotification(message);
-
-        setTimeout(() => {
-            _setNotification('')
-        }, 5000)
+    function compareRoles(user_role, min_role) {
+        const roleOrder = ['member', 'moderator', 'admin'];
+        return roleOrder.indexOf(user_role) >= roleOrder.indexOf(min_role);
     }
 
     return (
@@ -99,14 +105,14 @@ export const ContextProvider = ({ children }) => {
             user,
             setUser,
             login,
+            signup,
             checkLogin,
             logout,
-            token,
-            setToken,
-            notification,
+            compareRoles,
             setNotification,
         }}>
             <RenderMenu />
+            <ToastContainer />
             <main>
                 <RenderRoutes />
             </main>

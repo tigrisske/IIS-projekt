@@ -9,6 +9,9 @@ use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use App\Models\User;
+use App\Models\Review;
+use Illuminate\Support\Facades\Validator;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -270,6 +273,54 @@ class EventController extends Controller
         $event->is_confirmed = true;
         $event->save();
         return response()->json(['message' => 'Event confirmed.'], 200);
+    }
+
+    public function getReviews($eventId)
+    {
+        $perPage = 12; // Number of reviews per page
+        $currentPage = request()->query('page', 1); // Get the current page from the query parameter, default to 1 if not provided
+
+        // Find the event by its ID
+        $event = Event::findOrFail($eventId);
+
+        // Get all reviews associated with this event
+        $reviews = $event->reviews()
+            ->with([
+                'user' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name');
+                }
+            ])
+            ->paginate($perPage, ['*'], 'page', $currentPage); // Paginate reviews based on the current page
+
+
+        return response()->json($reviews, 200);
+    }
+
+    public function createReview($eventId, Request $request)
+    {
+        $requestData = $request->all();
+        $requestData['event_id'] = $eventId;
+        $requestData['user_id'] = Auth::user()->id;
+
+        // Validate the request data
+        $validatedData = Validator::make($requestData, [
+            'user_id' => 'required|exists:users,id',
+            'event_id' => 'required|exists:events,id',
+            'rating' => 'required|integer|between:1,5',
+            'comment' => 'nullable|string',
+        ])->validate();
+
+        // Find the event by its ID
+        $event = Event::findOrFail($eventId);
+
+        // Create a new review associated with this event
+        $review = new Review($validatedData);
+
+        // Associate the review with the event
+        $event->reviews()->save($review);
+
+        // Return the newly created review
+        return response()->json(['review' => $review]);
     }
 
 
