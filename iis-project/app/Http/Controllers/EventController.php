@@ -151,8 +151,8 @@ class EventController extends Controller
         $location = Location::find($event->location_id);
 
         //if a authenticated user wants to display event, we check whether he has alraedy joined the event
+        $tickets = Ticket::where('event_id', $event->id)->get();
         if (Auth::check()) {
-            $tickets = Ticket::where('event_id', $event->id)->get();
             $user = Auth::user();
             $has_joined = EventUser::where('user_id', $user->id)->where('event_id', $event->id)->exists();
             return response()->json([
@@ -163,7 +163,7 @@ class EventController extends Controller
             ], 200);
         }
 
-        return response()->json(['event' => $event, 'has_joint' => false, 'location' => $location], 200);
+        return response()->json(['event' => $event, 'has_joint' => false, 'location' => $location, 'tickets' => $tickets], 200);
     }
 
     public function joinEvent(Event $event, $eventId, $ticketId)
@@ -267,9 +267,12 @@ class EventController extends Controller
     /*
      * Confirm event, get event id from post
      */
-    public function confirmEvent(Event $request)
+    public function confirmEvent(Event $event, $eventId)
     {
-        $event = Event::find($request->event_id);
+        $event = Event::find($eventId);
+        if(!$event){
+            return response()->json(['message' => 'Event not found.'], 401);
+        }
         $event->is_confirmed = true;
         $event->save();
         return response()->json(['message' => 'Event confirmed.'], 200);

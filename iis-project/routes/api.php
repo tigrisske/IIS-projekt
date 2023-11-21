@@ -30,15 +30,12 @@ Route::middleware(['web'])->group(function () {
     Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event/{id}', [EventController::class, 'show']);
     Route::get('/event/{id}/reviews', [EventController::class, 'getReviews']);
-    Route::get('/locations', [LocationController::class, 'index']);
-
 });
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/createevent', [EventController::class, 'create']);
     Route::post('/createlocation', [LocationController::class, 'create']);
     Route::post('/createcategory', [CategoryController::class, 'create']);
-    Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::get('/event/{eventId}/users', [EventController::class, 'get_users']);
     Route::post('/event/{eventId}/join/ticket/{ticketId}', [EventController::class, 'joinEvent']);
@@ -53,10 +50,28 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/myupcomingevents', [UserController::class, 'getUpcomingEvents']);
     Route::get('/myevents', [EventController::class, 'index_created_events']);
     Route::post('/event/{id}/reviews', [EventController::class, 'createReview']);
+
+    Route::get('/getalllocations', [LocationController::class, 'getAllLocations']);
+    Route::get('/getallcategories', [CategoryController::class, 'getAllCategories']);
+
+    Route::get('/locations', [LocationController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
 });
 
 Route::middleware(['web','auth', 'role:moderator'])->group(function () {
     Route::delete('/review/{id}', [ReviewController::class,'destroy']);
+
+    Route::delete('/event/{eventId}', [EventController::class, 'destroy']);
+    Route::delete('/location/{locationId}', [LocationController::class, 'destroy']);
+    Route::delete('/category/{categoryId}', [CategoryController::class, 'destroy']);
+
+    Route::post('/confirm_event/{eventId}', [EventController::class, 'confirmEvent']);
+    Route::post('/confirm_location/{locationId}', [LocationController::class, 'confirmLocation']);
+    Route::post('/confirm_category/{categoryId}', [CategoryController::class, 'confirmCategory']);
+
+    Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
+    Route::get('/unconfirmed_categories', [CategoryController::class, 'getUnconfirmed']);
+    Route::get('/unconfirmed_locations', [LocationController::class, 'getUnconfirmed']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
@@ -64,8 +79,7 @@ Route::middleware(['web', 'auth', 'role:admin'])->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::put('/user/{id}/update-role', [UserController::class, 'updateRole']);
-    Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
-    Route::post('/confirm_event', [EventController::class, 'confirmEvent']);
+    
 });
 
 Route::middleware('auth:sanctum')->get('/check-auth', function (Request $request) {

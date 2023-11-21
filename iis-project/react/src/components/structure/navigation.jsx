@@ -11,14 +11,17 @@ import { CreateCategory } from "../../view/CreateCategory"
 import { SignUp } from "../../view/SignUp"
 import { MyEvents } from "../../view/MyEvents"
 import {Event} from "../../view/Event"
+import { Navigate } from "react-router-dom"
+import { Categories } from "../../view/Categories"
+import { Locations } from "../../view/Locations"
+
 
 export const nav = [
     {
         path: "/",
         name: "Home",
-        element: <Home />,
-        isMenu: true,
-        min_role : 0,
+        element: <Navigate to="/events" />,
+        isMenu: false,
         protected_route: false
     },
     {
@@ -26,7 +29,6 @@ export const nav = [
         name: "Login",
         element: <Login />,
         isMenu: false,
-        min_role : 0,
         protected_route: false
     },
     {
@@ -34,7 +36,6 @@ export const nav = [
         name: "Sign Up",
         element: <SignUp />,
         isMenu: false,
-        min_role : 0,
         protected_route: false
     },
     {
@@ -42,7 +43,6 @@ export const nav = [
         name: "Events",
         element: <Events />,
         isMenu: true,
-        min_role : 0,
         protected_route: false
     },
 {
@@ -50,7 +50,6 @@ export const nav = [
         name: "Event",
         element: <Event/>,
         isMenu: false,
-        min_role : 0,
         protected_route: false
     },
     {
@@ -77,6 +76,22 @@ export const nav = [
     //     protected_route: true,
     //     min_role: 'member'
     // },
+    {
+        path: "/categories",
+        name: "Categories",
+        element: <Categories />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'moderator'
+    },
+    {
+        path: "/locations",
+        name: "Locations",
+        element: <Locations />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'moderator'
+    },
     {
         path: "/calendar",
         name: "UpcomingCalendar",

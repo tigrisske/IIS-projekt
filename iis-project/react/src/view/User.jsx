@@ -8,15 +8,16 @@ export const UserDetail = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [confirmedRole, setConfirmedRole] = useState(null);
     const { userId } = useParams();
+    
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (userId) {
                     const response = await axiosClient.get(`/user/${userId}`);
-                    setUser(response.data.user);
-                    setConfirmedRole(response.data.user.role);
-                    setNewRole(response.data.user.role);
+                    setUser(response.data);
+                    setConfirmedRole(response.data.role);
+                    setNewRole(response.data.role);
                 }
             } catch (error) {
                 console.log(`Error fetching user! ${error.response.data.message}`);

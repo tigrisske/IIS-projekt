@@ -22,13 +22,13 @@ export const CategoryDropdown = ({ category, selectedCategory, setCategory, last
           <button
             onClick={handleToggle}
             //if the current clicked category is the same as the selected category, make it bold
-            style={{ fontWeight: lastClickedCategoryId === category.id ? 'bold' : 'normal' }}
+            style={{minWidth:195, fontWeight: lastClickedCategoryId === category.id ? 'bold' : 'normal' }}
           >
             {category.name}
           </button>
           {isOpen && (
             //each new open category should be placed a bit to the right
-            <div style={{ marginLeft: '25px' }}>
+            <div style={{ marginLeft: '85px' }}>
               {category.children.map((child) => (
                 <CategoryDropdown
                   key={child.id}

@@ -12,7 +12,8 @@ class Category extends Model
     protected $fillable = [
         'name',
         'parent_id',
-        'created_by', 
+        'created_by',
+        'confirmed' 
     ];
 
     public function parent()

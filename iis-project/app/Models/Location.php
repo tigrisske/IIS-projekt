@@ -16,7 +16,8 @@ class Location extends Model
         'zip_code', 
         'country',
         'description',
-        'created_by' 
+        'created_by',
+        'confirmed' 
     ];
 
     public function images()

@@ -1,10 +1,17 @@
 import axios from "axios";
-
+// import { setUser } from  
+// import { useAuth } from "./context/auth-context";
+// import  navigate  from './navigationService';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 // After setting SESSION_ID in local storage
 console.log(localStorage.getItem('SESSION_ID'));
+
+const redirectToLogin = () => {
+    // Perform a redirect to the login page
+    window.location.href = '/login';
+  };
 
 const axiosClient = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}api`,
@@ -42,6 +49,10 @@ axiosClient.interceptors.response.use(
         const { response } = error;
         if (response.status === 401) {
             localStorage.removeItem('SESSION_ID');
+            // setUser({ ...user, isAuthenticated: false })
+            localStorage.removeItem('user')
+            redirectToLogin();
+
         }
         throw error;
     }

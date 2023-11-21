@@ -11,7 +11,8 @@ export const CreateCategory = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axiosClient.get('/categories'); 
+        const response = await axiosClient.get('/getallcategories'); 
+        console.log(response.data);
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -24,7 +25,7 @@ export const CreateCategory = () => {
   const showCategories = async (event) => {
     event.preventDefault();
 
-    axiosClient.get('/categories')
+    axiosClient.get('/getallcategories')
       .then(response => {
         console.log(response.data);
       })

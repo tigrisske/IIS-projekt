@@ -10,9 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. With pagination.
      */
-    public function index()
+    public function index(Request $request)
+    {
+        $perPage = $request->input('perPage', 10);
+        $page = $request->input('page', 1);
+    
+        $categories = Category::select('categories.*', 'parent.name as parent_name')
+            ->orderBy('categories.name', 'asc')
+            ->where('categories.confirmed', true)
+            ->leftJoin('categories as parent', 'categories.parent_id', '=', 'parent.id')
+            ->paginate($perPage, ['categories.*'], 'page', $page);
+    
+        return response()->json($categories);
+    }
+    
+
+    /**
+     * Get all categories.
+     */
+    public function getAllCategories()
     {
         $categories = $this->getNestedCategories();
     
@@ -20,31 +38,51 @@ class CategoryController extends Controller
     }
     
     private function getNestedCategories($parentId = null)
-    {
-        $categories = Category::where('parent_id', $parentId)->get();
-    
-        foreach ($categories as $category) {
-            $category->children = $this->getNestedCategories($category->id);
-        }
-    
-        return $categories;
+{
+    $categories = Category::where('parent_id', $parentId)
+                          ->where('confirmed', 1) // Add the condition for confirmed
+                          ->get();
+
+    foreach ($categories as $category) {
+        $category->children = $this->getNestedCategories($category->id);
     }
+
+    return $categories;
+}
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
-        $data = $request;//->validated();
+        $data = $request->validated();
         $user = Auth::user();
-        $event = Category::create([
+        $category = Category::create([
             'name' => $data['name'],
             'parent_id' => $data['parent_id'],
             'created_by' => $user->id,
         ]);
 
 
-        return response()->json(['message' => 'Location created and logged in']);
+        return response()->json(['message' => 'Category created and logged in']);
+    }
+
+    public function getUnconfirmed()
+    {
+        $categories = Category::where('confirmed', 0)->get();
+        return Response::json($categories);
+    }
+
+    public function confirmCategory(Category $category, $categoryId)
+    {
+        $category = Category::find($categoryId);
+        if(!$category){
+            return response()->json(['message' => 'Category not found.'], 401);
+        }
+        $category->confirmed = true;
+        $category->save();
+        return response()->json(['message' => 'Category confirmed.'], 200);
     }
 
     /**
@@ -82,8 +120,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category, $categoryId)
     {
-        //
+        $category = Category::find($categoryId);
+
+        Category::where('id', $categoryId)->delete();
     }
 }

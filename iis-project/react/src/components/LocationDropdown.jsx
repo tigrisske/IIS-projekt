@@ -8,7 +8,7 @@ export const LocationDropdown = ({ onSelect }) => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await axiosClient.get('/locations');
+        const response = await axiosClient.get('/getalllocations');
         console.log(response.data)
         setLocations(response.data);
       } catch (error) {

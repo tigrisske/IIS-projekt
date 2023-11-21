@@ -9,12 +9,33 @@ use App\Http\Requests\LocationRequest;
 
 class LocationController extends Controller
 {
+    public function getAllLocations()
+    {
+        //only confirmed locations
+        $locations = Location::where('confirmed', true)->orderBy('name')->get();
+        // $locations = Location::orderBy('name')->get();
+
+        return response()->json($locations);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $locations = Location::orderBy('name')->get();
+        $perPage = $request->input('perPage', 10); // Number of events per page, default is 10
+        $page = $request->input('page', 1); // Current page, default is 1
+
+        $locations = Location::orderBy('name', 'asc')
+            ->where('confirmed', true)
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($locations);
+    }
+
+    public function getUnconfirmed()
+    {
+        $locations = Location::where('confirmed', false)->orderBy('name')->get();
 
         return response()->json($locations);
     }
@@ -26,7 +47,7 @@ class LocationController extends Controller
     {
         $user = Auth::user();
         $data = $request->validated();
-        $event = Location::create([
+        $location = Location::create([
             'name' => $data['name'],
             'address_line_1' => $data['address_line_1'],
             'city' => $data['city'], 
@@ -38,6 +59,17 @@ class LocationController extends Controller
 
 
         return response()->json(['message' => 'Location created and logged in']);
+    }
+
+    public function confirmLocation(Location $location, $locationId)
+    {
+        $location = Location::find($locationId);
+        if(!$location){
+            return response()->json(['message' => 'Location not found.'], 401);
+        }
+        $location->confirmed = true;
+        $location->save();
+        return response()->json(['message' => 'Location confirmed.'], 200);
     }
 
     /**
@@ -75,8 +107,10 @@ class LocationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Location $location)
+    public function destroy(Location $location, $locationId)
     {
-        //
+        $location = Location::find($locationId);
+
+        Location::where('id', $locationId)->delete();
     }
 }

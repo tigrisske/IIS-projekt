@@ -81,9 +81,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user, $userId)
     {
-        return response()->json(['user' => $user]);
+        //return the user date based on id 
+        $user = User::find($userId);
+        return response()->json($user);
     }
 
     /**
