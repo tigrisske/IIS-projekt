@@ -5,9 +5,6 @@ import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context.jsx';
 
-
-
-
 export const Events = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,16 +29,20 @@ export const Events = () => {
   };
 
   return (
-    <div >
+    <div>
       <h1>Events</h1>
-      <ul className = "app-body">
+      <ul className="app-body">
         {events.map((event) => (
-          <Event key={event.id}  {...event} />
+          <Event key={event.id} {...event} />
         ))}
       </ul>
       <div>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index + 1} onClick={() => handlePageClick(index + 1)}>
+          <button
+            key={index + 1}
+            onClick={() => handlePageClick(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
             {index + 1}
           </button>
         ))}

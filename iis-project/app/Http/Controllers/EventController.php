@@ -19,14 +19,17 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 3); // Number of events per page, default is 10
+        $perPage = $request->input('perPage', 4); // Number of events per page, default is 10
         $page = $request->input('page', 1); // Current page, default is 1
-
-        $events = Event::orderBy('end_date', 'asc')
+    
+        $events = Event::join('locations', 'events.location_id', '=', 'locations.id')
+            ->select('events.*', 'locations.name as location_name')
+            ->orderBy('events.end_date', 'asc')
             ->paginate($perPage, ['*'], 'page', $page);
-
+    
         return response()->json($events);
     }
+
 
     public function index_created_events(Request $request)
     {
@@ -174,7 +177,6 @@ class EventController extends Controller
         if ($event->joined_count >= $event->capacity) {
             return response()->json(['message' => 'Event is full.'], 401);
         }
-
         //when the event is does not need a payment in advance, we can join the event
         if (!$event->pay_in_advance) {
             $eventuser = EventUser::create([
@@ -184,6 +186,11 @@ class EventController extends Controller
             'ticket_id' => $ticketId,
             ]);
             $event->increment('joined_count', 1);
+            $ticket = Ticket::find($ticketId);
+            if($ticket->amount == 0){
+                return response()->json(['message' => 'No more tickets available.'], 401);
+            }
+            $ticket->decrement('amount');
             return response()->json(['message' => 'User joined event.'], 200);
         }
         //when the event needs a payment in advance, we need to send a request to join the event
@@ -194,7 +201,7 @@ class EventController extends Controller
                 'confirmed' => false,
                 'ticket_id' => $ticketId,
             ]);
-
+            $event->increment('joined_count', 1);
             //we decrement the amount of available tickets as the user declared he paid for the ticket
             $ticket = Ticket::find($ticketId);
             $ticket->decrement('amount');
@@ -242,7 +249,7 @@ class EventController extends Controller
         if(!$user_event_row){
             return response()->json(['message' => 'User not found.'], 401);
         }
-
+        $event->decrement('joined_count', 1);
         //we increment the amount of tickets back, as the user got rejected 
         $ticketId = $user_event_row->ticket_id;
         $ticket = Ticket::find($ticketId);
@@ -285,10 +292,19 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event)
+    public function destroy(Event $event, $eventId)
     {
-        //
-    }
+        $event = Event::find($eventId);
+
+        // Delete related rows in the EventUser table
+        EventUser::where('event_id', $eventId)->delete();
+
+        // Delete related rows in the tickets table
+        Ticket::where('event_id', $eventId)->delete();
+
+        // Delete the event from the events table
+        Event::where('id', $eventId)->delete();
+}
 
     public function getUnConfirmed()
     {

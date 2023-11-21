@@ -46,6 +46,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/event/{eventId}/approve/users', [EventController::class, 'approveAllUsers']);
     Route::post('/event/{eventId}/approve/user/{userId}', [EventController::class, 'approveUser']);
     Route::post('/event/{eventId}/decline/user/{userId}', [EventController::class, 'declineUser']);
+    Route::post('/event/{eventId}/delete', [EventController::class, 'destroy']);
 
     Route::post('/event/{id}/has_joined', [EventController::class, 'has_joined']);
     Route::post('/logout', [AuthController::class, 'logout']);

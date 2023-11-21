@@ -25,7 +25,7 @@ class EventRequest extends FormRequest
             'name' => 'required|string|max:110',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'capacity' => 'required|integer|min:1|max:100000',
+            'capacity' => 'required|integer|min:1|max:99999999',
             'description' => 'required|string|max:1100',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',

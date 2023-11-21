@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context';
 import { set } from 'date-fns';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Event = () => {
     const [event, setEvent] = useState(null);
@@ -18,6 +19,7 @@ export const Event = () => {
     const [isMyEvent, setIsMyEvent] = useState(undefined); 
     const { user } = useStateContext();
     const [key, setKey] = useState(0);
+    const navigate = useNavigate();
 
 
     const { eventId } = useParams();
@@ -100,6 +102,10 @@ export const Event = () => {
         setCurrentPage(newPage);
     };
 
+    const navigateToMyEvents = () => {
+        navigate('/myevents');
+    };
+
     const handleTicketChange = (ticket) => {
         setSelectedTicket(ticket);
     };
@@ -142,19 +148,36 @@ export const Event = () => {
         })
         .catch((error) => {
             console.log("marek toto je error");
-            console.log(error);});
+            console.log(error);})
     };
+    const handleDelete = () => {
+        axiosClient.post(`/event/${eventId}/delete`)
+        .then((response) => {
+            console.log(response);
+            setIsError(false);
+            setErrorMessage(`Event deleted!`);
+            navigate('/myevents');
 
+        })
+        .catch((error) => {
+            console.log("marek toto je error");
+            console.log(error);})
+        
+    }
     return (
         <div className='centered-600px-container ' style={{ textAlign: 'center' }}>
             {event ? (
                 <div>
               
                     <h1>{event.name}</h1>
+                    <p>{event.description}</p>
                     <p>Starting: {event.start_date}</p>
                     <p>End: {event.end_date}</p>
-                    <p>Description: {event.description}</p>
-                    <p>Capacity:{event.joined_count}/{event.capacity}</p>
+                    {event.capacity !== 99999999 ? (
+                        <p>{event.joined_count}/{event.capacity} people have joined this event.</p>
+                    ) : (
+                        <p>Unlimited capacity</p>
+                    )}
                     {event.pay_in_advance ? (<p> Requires payment in advance.</p>) : null}
                     <p>{location.name}</p>
                     <div>
@@ -164,8 +187,12 @@ export const Event = () => {
                             <option value="">Choose a ticket</option>
                             {tickets.map((ticket) => (
                                 <option key={ticket.id} value={JSON.stringify(ticket)}>
-                                    {ticket.title} - ${ticket.price}
-                                </option>
+                                {ticket.amount > 0 ? (
+                                    `${ticket.title} - $${ticket.price} - ${ticket.amount} tickets left`
+                                ) : (
+                                    `${ticket.title} - $${ticket.price} - SOLD OUT`
+                                )}
+                            </option>
                             ))}
                         </select>
                     </div>
@@ -213,6 +240,7 @@ export const Event = () => {
             )}
             {event ? ( <div>
 
+       {(user.id === event.created_by) &&  <button onClick={() => handleDelete()}>Delete</button>}
       {(user.id === event.created_by) && eventUsers.length > 0 && (
                 <div>
                     <h3>Users who have sent a login request:</h3>

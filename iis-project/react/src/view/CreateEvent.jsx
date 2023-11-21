@@ -1,131 +1,3 @@
-// import React, { useState, useRef, useEffect } from 'react';
-// import axiosClient from '../axios-client';
-// import { CategoryDropdown } from '../components/CategoryDropdown';
-// import { LocationDropdown } from '../components/LocationDropdown';
-// import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
-// import TimePicker from 'react-bootstrap-time-picker';
-
-// const formatTime = (timeInSeconds) => {
-//   const hours = Math.floor(timeInSeconds / 3600);
-//   const minutes = Math.floor((timeInSeconds % 3600) / 60);
-//   const seconds = Math.floor(timeInSeconds % 60);
-
-//   const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-//   return formattedTime;
-// };
-
-// export const CreateEvent = () => {
-//   const nameRef = useRef();
-//   const capacityRef = useRef();
-//   const descriptionRef = useRef();
-//   const categoryIdRef = useRef();
-//   const locationIdRef = useRef();
-//   const [selectedStartTime, setSelectedStartTime] = useState(0);
-//   const [selectedEndTime, setSelectedEndTime] = useState(0);
-//   const [startDate, setStartDate] = useState(null);
-//   const [endDate, setEndDate] = useState(null);
-//   const [errorMessage, setErrorMessage] = useState('');
-//   const [isError, setIsError] = useState(false);
-
-//   // Category use states
-//   const [category, setCategory] = useState(null);
-//   const [categories, setCategories] = useState([]);
-//   const [lastClickedCategoryId, setLastClickedCategoryId] = useState(null);
-
-//   // Location use states
-//   const [selectedLocation, setSelectedLocation] = useState(null);
-//   const [payInAdvance, setPayInAdvance] = useState(false);
-
-//   // Ticket use states
-//   const [tickets, setTickets] = useState([{ price: '', amount: '' }]);
-
-//   const handleStartDateChange = (date) => {
-//     setStartDate(date);
-//   };
-
-//   const handlePayInAdvanceChange = () => {
-//     setPayInAdvance(!payInAdvance);
-//   }
-
-//   const handleEndDateChange = (date) => {
-//     setEndDate(date);
-//   };
-
-//   const handleLocationSelect = (selectedLocation) => {
-//     setSelectedLocation(selectedLocation);
-//   }
-
-//   const handleTicketChange = (index, key, value) => {
-//     const updatedTickets = [...tickets];
-//     updatedTickets[index][key] = value;
-//     setTickets(updatedTickets);
-//   };
-
-//   const handleCreate = async (event) => {
-//     // ... (unchanged)
-
-// // Tickets
-// const ticketData = tickets.map((ticket) => ({
-//   price: ticket.price,
-//   amount: ticket.amount,
-// }));
-
-// // Request
-// const request = {
-//   // ... (unchanged)
-//   tickets: ticketData,
-// };
-
-//     // ...
-//   };
-
-// const addTicket = () => {
-//   if (tickets.length < 3) {
-//     setTickets([...tickets, { price: '', amount: '' }]);
-//   }
-// };
-
-// const removeTicket = (index) => {
-//   if (tickets.length > 1) {
-//     const updatedTickets = [...tickets];
-//     updatedTickets.splice(index, 1);
-//     setTickets(updatedTickets);
-//   }
-// };
-
-//   return (
-//     <div>
-//       {/* ... (unchanged) */}
-//       <h2 style={{ fontWeight: 'bold' }}>Select a category:</h2>
-//       {/* ... (unchanged) */}
-//       <div>
-//         {tickets.map((ticket, index) => (
-//           <div key={index}>
-//             <label>Price:</label>
-//             <input
-//               type="text"
-//               value={ticket.price}
-//               onChange={(e) => handleTicketChange(index, 'price', e.target.value)}
-//             />
-//             <label>Amount:</label>
-//             <input
-//               type="text"
-//               value={ticket.amount}
-//               onChange={(e) => handleTicketChange(index, 'amount', e.target.value)}
-//             />
-//             {index > 0 && <button onClick={() => removeTicket(index)}>Remove Ticket</button>}
-//           </div>
-//         ))}
-//         {tickets.length < 3 && <button onClick={addTicket}>Add Ticket</button>}
-//       </div>
-//       {/* ... (unchanged) */}
-//     </div>
-//   );
-// };
-
-// export default CreateEvent;
-
 import React, { useState, useRef, useEffect } from "react";
 import axiosClient from "../axios-client";
 import DatePicker from "react-datepicker";
@@ -172,6 +44,9 @@ export const CreateEvent = () => {
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [payInAdvance, setPayInAdvance] = useState(false);
 
+    const [isUnlimited, setIsUnlimited] = useState(false);
+    const [capacity, setCapacity] = useState("");
+
     //HANDLE METHODS
     //start date and end date
     const handleStartDateChange = (date) => {
@@ -198,6 +73,14 @@ export const CreateEvent = () => {
         updatedTickets[index][key] = value;
         setTickets(updatedTickets);
     };
+
+    const handleUnlimitedChange = () => {
+        setIsUnlimited(!isUnlimited);
+        if (isUnlimited) {
+          setCapacity(""); // Clear the capacity when unlimited is checked
+        }
+        setCapacity(capacityRef.current.value);
+      };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -255,7 +138,7 @@ export const CreateEvent = () => {
                 selectedStartTime
             )} `,
             end_date: `${formatedEndDate} ${formatTime(selectedEndTime)} `,
-            capacity: capacityRef.current.value,
+            capacity: isUnlimited ? 99999999 : capacityRef.current.value,
             description: descriptionRef.current.value,
             category_id: category ? category.id : null,
             location_id: selectedLocation ? selectedLocation.id : null,
@@ -352,7 +235,15 @@ export const CreateEvent = () => {
                     />
                 </div>
             </div>
-            <input type="email" ref={capacityRef} placeholder="capacity" />
+            <input type="text" ref={capacityRef} placeholder="capacity" disabled={isUnlimited} />
+            <label htmlFor="unlimitedCheckbox">Unlimited</label>
+            <input
+                type="checkbox"
+                id="unlimitedCheckbox"
+                name="unlimitedCheckbox"
+                onChange={handleUnlimitedChange}
+                checked={isUnlimited}
+            />
             <input type="text" ref={descriptionRef} placeholder="description" />
             <LocationDropdown onSelect={handleLocationSelect} />
             <h2 style={{ fontWeight: "bold" }}>Select a category:</h2>

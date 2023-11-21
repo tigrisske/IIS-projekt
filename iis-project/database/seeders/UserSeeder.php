@@ -34,7 +34,22 @@ class UserSeeder extends Seeder
                 "email"=> "mod@mod.com",
                 "password"=> bcrypt("Heslo123!"),
                 "role"=> "moderator",
+            ],
+            [
+                "first_name"=> "admin",
+                "last_name"=> "admin",
+                "email"=> "a@a",
+                "password"=> bcrypt("test123."),
+                "role"=> "moderator",
+            ],
+            [
+                "first_name"=> "admin",
+                "last_name"=> "admin",
+                "email"=> "m@m",
+                "password"=> bcrypt("test123."),
+                "role"=> "moderator",
             ]
+
         ];
 
         DB::table('users')->insert($users);
