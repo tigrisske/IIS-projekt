@@ -56,7 +56,7 @@ class CategoryController extends Controller
      */
     public function create(Request $request)
     {
-        $data = $request->validated();
+        $data = $request;
         $user = Auth::user();
         $category = Category::create([
             'name' => $data['name'],
@@ -112,9 +112,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $categoryId)
     {
-        //
+        $category =  Category::find($categoryId);
+        //change the name of the category
+        $category->name = $request->name;
+        $category->save();
+        return response()->json(['message' => 'Category updated.'], 200);
+
     }
 
     /**

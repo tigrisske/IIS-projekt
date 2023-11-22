@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 import { useStateContext } from '../components/Context';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -9,6 +10,7 @@ export const Categories = () => {
     const [lastPage, setLastPage] = useState(1);
     const [editingCategoryId, setEditingCategoryId] = useState(null);
     const [editedCategoryName, setEditedCategoryName] = useState('');
+    const { setNotification } = useStateContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,7 +34,7 @@ export const Categories = () => {
             setCategories(categories.filter((category) => category.id !== categoryToDelete));
         } catch (error) {
             console.error('Error deleting category:', error);
-            // Handle errors, show error messages, etc.
+            setNotification("Error deleting category. Make sure this category has no subcategories and that there are no events assigned to this category before deleting.", 'error');
         }
     };
 
@@ -47,7 +49,17 @@ export const Categories = () => {
     };
 
     const onSaveEditClick = async (categoryId) => {
-        console.log('saving edit');
+        axiosClient.post(`update_category/${categoryId}`, { name: editedCategoryName })
+        .then((response) => {
+            console.log(response);
+            setEditingCategoryId(null);
+            setEditedCategoryName('');
+            fetchCategories(currentPage);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
         
     };
 
