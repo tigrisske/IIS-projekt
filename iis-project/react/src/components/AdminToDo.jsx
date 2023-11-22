@@ -19,7 +19,9 @@ export const AdminToDo = () => {
             .then((response) => {
                 console.log(response.data);
                 setEvents(response.data.events);
-            })
+            }).catch(response => {
+                console.log(response);
+            });
         axiosClient.get("/unconfirmed_locations")
             .then((response) => {
                 console.log(response.data)
@@ -106,7 +108,7 @@ export const AdminToDo = () => {
             <h1>Todo</h1>
             <div className='centered-fullpage-container'>
                 <div>
-                    {events.length > 0 && <h2>Events to confirm:</h2> }
+                    {events.length > 0 && <h2>Events to confirm:</h2>}
                     <ul >
                         {events.map((event) => (
                             <li key={event.id} className="">
@@ -131,7 +133,7 @@ export const AdminToDo = () => {
                     </ul>
                 </div>
                 <div>
-                {locations.length > 0 && <h2>Locations to confirm:</h2> }
+                    {locations.length > 0 && <h2>Locations to confirm:</h2>}
                     <ul >
                         {locations.map((location) => (
                             <li key={location.id} className="">
@@ -142,7 +144,7 @@ export const AdminToDo = () => {
                                 </div>
                                 <div className='horizontal-buttons end-aligned-row-flex-container'>
                                     {/* <button onClick={() => handleEventOpen(location.id)} className='secondary-btn'> */}
-                                        {/* More info */}
+                                    {/* More info */}
                                     {/* </button> */}
                                     <button onClick={() => handleLocationConfirm(location.id)} className='primary-btn'>
                                         Confirm
@@ -157,7 +159,7 @@ export const AdminToDo = () => {
                     </ul>
                 </div>
                 <div>
-                {categories.length > 0 && <h2>Categories to confirm:</h2> }
+                    {categories.length > 0 && <h2>Categories to confirm:</h2>}
                     <ul >
                         {categories.map((category) => (
                             <li key={category.id} className="">
@@ -166,7 +168,7 @@ export const AdminToDo = () => {
                                 </div>
                                 <div className='horizontal-buttons end-aligned-row-flex-container'>
                                     {/* <button onClick={() => handleEventOpen(category.id)} className='secondary-btn'> */}
-                                        {/* More info */}
+                                    {/* More info */}
                                     {/* </button> */}
                                     <button onClick={() => handleCategoryConfirm(category.id)} className='primary-btn'>
                                         Confirm

@@ -1,5 +1,6 @@
 main {
     margin: 0 auto;
+    height: 100vh;
     padding: 0 5%;
     text-align: center;
 }

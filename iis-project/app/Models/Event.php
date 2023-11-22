@@ -17,7 +17,7 @@ class Event extends Model
         'description', 
         'category_id', 
         'location_id', 
-        'is_confirmed',
+        'confirmed_by',
         'created_by',
         'pay_in_advance',
         'ticket_data'

@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('event_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('ticket_id');
+            $table->boolean('pay_in_advance_confirmed')->default(false);
+
             $table->timestamps();
 
             // Foreign keys
             $table->foreign('event_id')->references('id')->on('events');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('ticket_id')->references('id')->on('tickets');
         });
     }
 

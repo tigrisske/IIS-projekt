@@ -22,7 +22,7 @@ class EventSeeder extends Seeder
                 'description' => 'Some description',
                 'category_id' => 1,
                 'location_id' => 1,
-                'is_confirmed' => 1,
+                'confirmed_by' => null,
             ],
             [
                 'name' => 'UFC 298',
@@ -32,7 +32,7 @@ class EventSeeder extends Seeder
                 'description' => 'Some description',
                 'category_id' => 1,
                 'location_id' => 1,
-                'is_confirmed' => 1,
+                'confirmed_by' => null,
             ],
             [
                 'name' => 'Octagon 35',
@@ -42,7 +42,7 @@ class EventSeeder extends Seeder
                 'description' => 'Some description',
                 'category_id' => 2,
                 'location_id' => 2,
-                'is_confirmed' => 1,
+                'confirmed_by' => null,
             ],
             [
                 'name' => 'Volby do NR SR',
@@ -52,7 +52,7 @@ class EventSeeder extends Seeder
                 'description' => 'Some description',
                 'category_id' => 1,
                 'location_id' => 1,
-                'is_confirmed' => 0,
+                'confirmed_by' => 1,
             ],
             [
                 'name' => 'Festival 2023',
@@ -62,7 +62,7 @@ class EventSeeder extends Seeder
                 'description' => 'Some description',
                 'category_id' => 4,
                 'location_id' => 3,
-                'is_confirmed' => 0,
+                'confirmed_by' => 1,
             ]
         ];
 

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             EventSeeder::class,
             ReviewsSeeder::class,
+            TicketSeeder::class,
         ]);
     }
 }

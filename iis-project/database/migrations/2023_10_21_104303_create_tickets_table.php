@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('price', 10, 2); // 10 digits in total, 2 after the decimal point
             $table->text('description')->nullable(); // Optional
+            $table->foreignId('event_id')->constrained('events');
+            $table->integer('amount')->default(1);
             $table->timestamps();
         });
     }

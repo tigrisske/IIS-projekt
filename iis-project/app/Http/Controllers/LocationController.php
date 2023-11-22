@@ -12,7 +12,7 @@ class LocationController extends Controller
     public function getAllLocations()
     {
         //only confirmed locations
-        $locations = Location::where('confirmed', true)->orderBy('name')->get();
+        $locations = Location::where('confirmed_by', '!=', null)->orderBy('name')->get();
         // $locations = Location::orderBy('name')->get();
 
         return response()->json($locations);
@@ -27,7 +27,7 @@ class LocationController extends Controller
         $page = $request->input('page', 1); // Current page, default is 1
 
         $locations = Location::orderBy('name', 'asc')
-            ->where('confirmed', true)
+            ->where('confirmed_by', '!=', null)
             ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json($locations);
@@ -35,7 +35,7 @@ class LocationController extends Controller
 
     public function getUnconfirmed()
     {
-        $locations = Location::where('confirmed', false)->orderBy('name')->get();
+        $locations = Location::where('confirmed_by', null)->orderBy('name')->get();
 
         return response()->json($locations);
     }
@@ -67,7 +67,7 @@ class LocationController extends Controller
         if(!$location){
             return response()->json(['message' => 'Location not found.'], 401);
         }
-        $location->confirmed = true;
+        $location->confirmed_by = Auth::user()->id;
         $location->save();
         return response()->json(['message' => 'Location confirmed.'], 200);
     }

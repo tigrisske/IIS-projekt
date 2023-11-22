@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Support\Facades\DB; // Import the DB facade
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -13,29 +12,38 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
+        DB::table('categories')->insert([
             [
                 'name' => 'Sport',
+                'parent_id' => null,
                 'created_by' => 1,
-                'confirmed_by' => 1,
-            ],
-            [
-                'name'=> 'Kultura',
-                'created_by'=> 1,
-                'confirmed_by'=> 1,
-            ],
-            [
-                'name'=> 'Politika',
-                'created_by'=> 1,
-                'confirmed_by'=> 1,
-            ],
-            [
-                'name'=> 'Hudba',
-                'created_by'=> 1,
-                'confirmed_by'=> 1,
-            ]
-            ];
 
-        DB::table('categories')->insert($data);
+            ],
+            [
+                'name' => 'Futbalovy zapas',
+                'parent_id' => 1,
+                'created_by' => 1,
+            ],
+            [
+                'name' => 'UFC zapas',
+                'parent_id' => 1,
+                'created_by' => 1,
+            ],
+            [
+                'name' => 'Kultura',
+                'parent_id' => null,
+                'created_by' => 1,
+            ],
+            [
+                'name' => 'Politika',
+                'parent_id' => null,
+                'created_by' => 1,
+            ],
+            [
+                'name' => 'Hudba',
+                'parent_id' => 4,
+                'created_by' => 1,
+            ]
+        ]);
     }
 }

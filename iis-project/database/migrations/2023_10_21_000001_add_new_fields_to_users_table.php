@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone_number')->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->integer('autohority_level')->default(0);
+            $table->string('role')->default('member');
         });
     }
 
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->dropColumn('last_name');
             $table->dropColumn('phone_number');
             $table->dropColumn('date_of_birth');
+            $table->dropColumn('role');
         });
     }
 };

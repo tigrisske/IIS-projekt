@@ -16,7 +16,7 @@ export const Event = () => {
     const [currentPage, setCurrentPage] = useState(1); // Current page for reviews
     const [tickets, setTickets] = useState([]); // Tickets for the event
     const [selectedTicket, setSelectedTicket] = useState(null);
-    const [isMyEvent, setIsMyEvent] = useState(undefined); 
+    const [isMyEvent, setIsMyEvent] = useState(undefined);
     const { user } = useStateContext();
     const [key, setKey] = useState(0);
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const Event = () => {
         };
 
         fetchData();
-    }, [eventId, isJoined,user, key]);
+    }, [eventId, isJoined, user, key]);
 
 
     const [eventUsers, setEventUsers] = useState([]); // State to store the users who have sent a login request
@@ -104,7 +104,7 @@ export const Event = () => {
             const approveResponse = await axiosClient.post(`/event/${eventId}/approve/user/${userId}`);
             setIsError(false);
             setErrorMessage(`User approved!`);
-          
+
         } catch (error) {
             setIsError(true);
             setErrorMessage(`Error approving user! ${error.response.data.message}`);
@@ -118,7 +118,7 @@ export const Event = () => {
             const declineResponse = await axiosClient.post(`/event/${eventId}/decline/user/${userId}`);
             setIsError(false);
             setErrorMessage(`User declined!`);
-            
+
         } catch (error) {
             setIsError(true);
             setErrorMessage(`Error declining user! ${error.response.data.message}`);
@@ -128,34 +128,36 @@ export const Event = () => {
     const handleApproveAll = () => {            // Check if the request to decrement tickets was successful
         setKey(key + 1);
         axiosClient.post(`/event/${eventId}/approve/users`)
-        .then((response) => {
-            console.log(response);
-            setIsError(false);
-            setErrorMessage(`All users approved!`);
-        })
-        .catch((error) => {
-            console.log("marek toto je error");
-            console.log(error);})
+            .then((response) => {
+                console.log(response);
+                setIsError(false);
+                setErrorMessage(`All users approved!`);
+            })
+            .catch((error) => {
+                console.log("marek toto je error");
+                console.log(error);
+            })
     };
     const handleDelete = () => {
         axiosClient.post(`/event/${eventId}/delete`)
-        .then((response) => {
-            console.log(response);
-            setIsError(false);
-            setErrorMessage(`Event deleted!`);
-            navigate('/myevents');
+            .then((response) => {
+                console.log(response);
+                setIsError(false);
+                setErrorMessage(`Event deleted!`);
+                navigate('/myevents');
 
-        })
-        .catch((error) => {
-            console.log("marek toto je error");
-            console.log(error);})
-        
+            })
+            .catch((error) => {
+                console.log("marek toto je error");
+                console.log(error);
+            })
+
     }
     return (
-        <div className='centered-600px-container ' style={{ textAlign: 'center'  }}>
+        <div className='centered-600px-container ' style={{ textAlign: 'center' }}>
             {event ? (
                 <div>
-              
+
                     <h1>{event.name}</h1>
                     <p>{event.description}</p>
                     <p>Starting: {event.start_date}</p>
@@ -167,62 +169,68 @@ export const Event = () => {
                     )}
                     {event.pay_in_advance ? (<p> Requires payment in advance.</p>) : null}
                     <p>{location.name}</p>
-                    <div>
-                        {/* Ticket selection dropdown */}
-                        <label htmlFor="ticket">Select a ticket:</label>
-                        <select id="ticket" onChange={(e) => handleTicketChange(JSON.parse(e.target.value))}>
-                            <option value="">Choose a ticket</option>
-                            {tickets.map((ticket) => (
-                                <option key={ticket.id} value={JSON.stringify(ticket)}>
-                                {ticket.amount > 0 ? (
-                                    `${ticket.title} - $${ticket.price} - ${ticket.amount} tickets left`
-                                ) : (
-                                    `${ticket.title} - $${ticket.price} - SOLD OUT`
-                                )}
-                            </option>
-                            ))}
-                        </select>
-                    </div>
+                    {isJoined ? (
+                        <h3 style={{ color: 'green' }}>You have joined this event.</h3>
+                    ) : (
+                        new Date(event.start_date) > new Date() ? (
+                            <div>
+                                {/* Ticket selection dropdown */}
+                                <label htmlFor="ticket">Select a ticket:</label>
+                                <select id="ticket" onChange={(e) => handleTicketChange(JSON.parse(e.target.value))}>
+                                    <option value="">Choose a ticket</option>
+                                    {tickets.map((ticket) => (
+                                        <option key={ticket.id} value={JSON.stringify(ticket)}>
+                                            {ticket.amount > 0 ? (
+                                                `${ticket.title} - $${ticket.price} - ${ticket.amount} tickets left`
+                                            ) : (
+                                                `${ticket.title} - $${ticket.price} - SOLD OUT`
+                                            )}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )
+                    )}
                     {new Date(event.start_date) < new Date() ? (
                         <Reviews eventId={eventId} />
                     ) : (
-                        <div></div>
+                        <div>
+                            <h2>Reviews</h2>
+                            <p>This event did not happen yet. Reviews will be available after the event starts.</p>
+                        </div>
                     )}
                 </div>
             ) : (
                 <p>Loading event data...</p>
             )}
 
-            {isJoined ? (
-                <h3 style={{ color: 'green' }}>You have joined this event.</h3>
-            ) : (
-                <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>
-            )}
-
             {errorMessage && (
                 <div style={{ color: isError ? 'red' : 'green' }}>{errorMessage}</div>
             )}
-            {event ? ( <div>
+            {event ? (<div>
 
-       {(user.id === event.created_by) &&  <button onClick={() => handleDelete()}>Delete</button>}
-      {(user.id === event.created_by) && eventUsers.length > 0 && (
-                <div>
-                    <h3>Users who have sent a login request:</h3>
-                    <button onClick={() => handleApproveAll()}>Approve All</button>
-                    <ul>
-                        {eventUsers.map((user) => (
-                            <li key={user.id}>
-                                <p>{user.first_name} {user.last_name}</p>
-                                <button onClick={() => handleApprove(user.id)}>Approve</button>
-                                <button onClick={() => handleDecline(user.id)}>Decline</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+                {(user.id === event.created_by) && <button onClick={() => handleDelete()}>Delete</button>}
+                {(user.id === event.created_by) && eventUsers.length > 0 && (
+                    <div>
+                        <h3>Users who have sent a login request:</h3>
+                        <button onClick={() => handleApproveAll()}>Approve All</button>
+                        <ul>
+                            {eventUsers.map((user) => (
+                                <li key={user.id}>
+                                    <p>{user.first_name} {user.last_name}</p>
+                                    <button onClick={() => handleApprove(user.id)}>Approve</button>
+                                    <button onClick={() => handleDecline(user.id)}>Decline</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>)
-            : (null)}
-            
+                : (null)}
+
         </div>
     );
 };

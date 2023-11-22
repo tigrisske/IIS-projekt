@@ -16,16 +16,16 @@ class CategoryController extends Controller
     {
         $perPage = $request->input('perPage', 10);
         $page = $request->input('page', 1);
-    
+
         $categories = Category::select('categories.*', 'parent.name as parent_name')
             ->orderBy('categories.name', 'asc')
-            ->where('categories.confirmed', true)
+            ->where('categories.confirmed_by', '!=', null)
             ->leftJoin('categories as parent', 'categories.parent_id', '=', 'parent.id')
             ->paginate($perPage, ['categories.*'], 'page', $page);
-    
+
         return response()->json($categories);
     }
-    
+
 
     /**
      * Get all categories.
@@ -33,22 +33,22 @@ class CategoryController extends Controller
     public function getAllCategories()
     {
         $categories = $this->getNestedCategories();
-    
+
         return Response::json($categories);
     }
-    
+
     private function getNestedCategories($parentId = null)
-{
-    $categories = Category::where('parent_id', $parentId)
-                          ->where('confirmed', 1) // Add the condition for confirmed
-                          ->get();
+    {
+        $categories = Category::where('parent_id', $parentId)
+            ->where('confirmed_by', '!=', null)
+            ->get();
 
-    foreach ($categories as $category) {
-        $category->children = $this->getNestedCategories($category->id);
+        foreach ($categories as $category) {
+            $category->children = $this->getNestedCategories($category->id);
+        }
+
+        return $categories;
     }
-
-    return $categories;
-}
 
 
     /**
@@ -65,22 +65,22 @@ class CategoryController extends Controller
         ]);
 
 
-        return response()->json(['message' => 'Category created and logged in']);
+        return response()->json(['message' => 'Category created']);
     }
 
     public function getUnconfirmed()
     {
-        $categories = Category::where('confirmed', 0)->get();
+        $categories = Category::where('confirmed_by', null)->get();
         return Response::json($categories);
     }
 
     public function confirmCategory(Category $category, $categoryId)
     {
         $category = Category::find($categoryId);
-        if(!$category){
+        if (!$category) {
             return response()->json(['message' => 'Category not found.'], 401);
         }
-        $category->confirmed = true;
+        $category->confirmed_by = Auth::user()->id;
         $category->save();
         return response()->json(['message' => 'Category confirmed.'], 200);
     }

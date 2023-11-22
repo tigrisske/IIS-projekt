@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // The name of the location
-            $table->string('addressline_1');
+            $table->string('address_line_1');
             $table->string('address_line_2')->nullable(); // Optional
             $table->string('city');
             $table->string('zip_code');

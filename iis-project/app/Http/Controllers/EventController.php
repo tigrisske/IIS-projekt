@@ -24,12 +24,12 @@ class EventController extends Controller
     {
         $perPage = $request->input('perPage', 4); // Number of events per page, default is 10
         $page = $request->input('page', 1); // Current page, default is 1
-    
+
         $events = Event::join('locations', 'events.location_id', '=', 'locations.id')
             ->select('events.*', 'locations.name as location_name')
             ->orderBy('events.end_date', 'asc')
             ->paginate($perPage, ['*'], 'page', $page);
-    
+
         return response()->json($events);
     }
 
@@ -69,7 +69,7 @@ class EventController extends Controller
             'description' => $data['description'],
             'category_id' => $data['category_id'],
             'location_id' => $data['location_id'],
-            'is_confirmed' => 0,
+            'confirmed_by' => null,
             'created_by' => $user->id,
             'pay_in_advance' => $data['pay_in_advance'],
             // 'ticket_data' =>$data['ticket_data']
@@ -88,9 +88,9 @@ class EventController extends Controller
         if ($tickets_total > $event->capacity) {
             return response()->json(['message' => 'Total amount of tickets is greater than event capacity.'], 401);
         }
-        
 
-        
+
+
         //now we create tickets in db
         for ($i = 0; $i < count($ticket_data); $i++) {
             $ticket = Ticket::create([
@@ -121,25 +121,25 @@ class EventController extends Controller
     }
     public function get_num_events()
     {
-        $count = Event::where('is_confirmed', 1)->count();
+        $count = Event::where('confirmed_by', '!=', null)->count();
         return response()->json(['count' => $count]);
     }
 
     public function get_users($id)
     {
         $event = Event::find($id);
-    
+
         // Get the user IDs that joined the event and are confirmed
         $userIds = EventUser::where('event_id', $event->id)
-                            ->where('confirmed', false)
-                            ->pluck('user_id');
-    
+            ->where('pay_in_advance_confirmed', true)
+            ->pluck('user_id');
+
         // Get the actual user records from the users table based on user IDs
         $users = User::whereIn('id', $userIds)->get();
-    
+
         return response()->json(['users' => $users], 200);
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -180,17 +180,17 @@ class EventController extends Controller
         if ($event->joined_count >= $event->capacity) {
             return response()->json(['message' => 'Event is full.'], 401);
         }
-        //when the event is does not need a payment in advance, we can join the event
+        //when the event does not need a payment in advance, we can join the event
         if (!$event->pay_in_advance) {
             $eventuser = EventUser::create([
-            'user_id' => $user->id,
-            'event_id' => $event->id,
-            'confirmed' => true,
-            'ticket_id' => $ticketId,
+                'user_id' => $user->id,
+                'event_id' => $event->id,
+                'pay_in_advance_confirmed' => true,
+                'ticket_id' => $ticketId,
             ]);
             $event->increment('joined_count', 1);
             $ticket = Ticket::find($ticketId);
-            if($ticket->amount == 0){
+            if ($ticket->amount == 0) {
                 return response()->json(['message' => 'No more tickets available.'], 401);
             }
             $ticket->decrement('amount');
@@ -201,7 +201,7 @@ class EventController extends Controller
             $eventuser = EventUser::create([
                 'user_id' => $user->id,
                 'event_id' => $event->id,
-                'confirmed' => false,
+                'pay_in_advance_confirmed' => false,
                 'ticket_id' => $ticketId,
             ]);
             $event->increment('joined_count', 1);
@@ -217,39 +217,40 @@ class EventController extends Controller
     public function approveUser(Event $event, $eventId, $userId)
     {
         $event = Event::find($eventId);
-        if(!$event){
+        if (!$event) {
             return response()->json(['message' => 'Event not found.'], 401);
         }
-        $user_event_row= EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
-        if(!$user_event_row){
+        $user_event_row = EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
+        if (!$user_event_row) {
             return response()->json(['message' => 'User not found.'], 401);
         }
-        $user_event_row->confirmed = true;
-        $user_event_row-> save();
+        $user_event_row->pay_in_advance_confirmed = true;
+        $user_event_row->save();
         return response()->json(['message' => 'User approved.'], 200);
     }
 
-    public function approveAllUsers(Event $event, $eventId){
+    public function approveAllUsers(Event $event, $eventId)
+    {
         $event = Event::find($eventId);
-        if(!$event){
+        if (!$event) {
             return response()->json(['message' => 'Event not found.'], 401);
         }
-        $user_event_rows= EventUser::where('event_id', $eventId)->get();
-        if(!$user_event_rows){
+        $user_event_rows = EventUser::where('event_id', $eventId)->get();
+        if (!$user_event_rows) {
             return response()->json(['message' => 'Users not found.'], 401);
         }
-        EventUser::where('event_id', $eventId)->update(['confirmed' => true]);
+        EventUser::where('event_id', $eventId)->update(['pay_in_advance_confirmed' => true]);
         return response()->json(['message' => 'All users approved.'], 200);
     }
 
     public function declineUser(Event $event, $eventId, $userId)
     {
         $event = Event::find($eventId);
-        if(!$event){
+        if (!$event) {
             return response()->json(['message' => 'Event not found.'], 401);
         }
-        $user_event_row= EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
-        if(!$user_event_row){
+        $user_event_row = EventUser::where('user_id', $userId)->where('event_id', $eventId)->first();
+        if (!$user_event_row) {
             return response()->json(['message' => 'User not found.'], 401);
         }
         $event->decrement('joined_count', 1);
@@ -270,10 +271,10 @@ class EventController extends Controller
     public function confirmEvent(Event $event, $eventId)
     {
         $event = Event::find($eventId);
-        if(!$event){
+        if (!$event) {
             return response()->json(['message' => 'Event not found.'], 401);
         }
-        $event->is_confirmed = true;
+        $event->confirmed_by = Auth::user()->id;
         $event->save();
         return response()->json(['message' => 'Event confirmed.'], 200);
     }
@@ -358,11 +359,11 @@ class EventController extends Controller
 
         // Delete the event from the events table
         Event::where('id', $eventId)->delete();
-}
+    }
 
     public function getUnConfirmed()
     {
-        $unconfirmed_events = Event::where('is_confirmed', false)->get();
+        $unconfirmed_events = Event::where('confirmed_by', null)->get();
         return response()->json([
             'events' => $unconfirmed_events,
         ], 200);

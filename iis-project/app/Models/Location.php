@@ -17,7 +17,7 @@ class Location extends Model
         'country',
         'description',
         'created_by',
-        'confirmed' 
+        'confirmed_by',
     ];
 
     public function images()
