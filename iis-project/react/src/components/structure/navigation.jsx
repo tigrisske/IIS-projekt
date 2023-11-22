@@ -40,19 +40,19 @@ export const nav = [
         protected_route: false
     },
     {
-        path: "/calendar",
-        name: "UpcomingCalendar",
-        element: <UpcomingCalendar />,
-        isMenu: true,
-        protected_route: true,
-        min_role: 'member'
-    },
-    {
         path: "/events",
         name: "Events",
         element: <Events />,
         isMenu: true,
         protected_route: false
+    },
+    {
+        path: "/calendar",
+        name: "My Calendar",
+        element: <UpcomingCalendar />,
+        isMenu: true,
+        protected_route: true,
+        min_role: 'member'
     },
     {
         path: "/myevents",
@@ -68,14 +68,6 @@ export const nav = [
         element: <Event />,
         isMenu: false,
         protected_route: false
-    },
-    {
-        path: "/calendar",
-        name: "My Calendar",
-        element: <UpcomingCalendar />,
-        isMenu: true,
-        protected_route: true,
-        min_role: 'member'
     },
     {
         path: "/categories",

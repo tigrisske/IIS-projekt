@@ -17,7 +17,7 @@ export const Event = () => {
     const [tickets, setTickets] = useState([]); // Tickets for the event
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [isMyEvent, setIsMyEvent] = useState(undefined);
-    const { user } = useStateContext();
+    const { user, setNotification } = useStateContext();
     const [key, setKey] = useState(0);
     const navigate = useNavigate();
 
@@ -153,6 +153,17 @@ export const Event = () => {
             })
 
     }
+
+    const handleEventConfirm = async (eventId) => {
+        try {
+            const response = await axiosClient.post(`/confirm_event/${eventId}`);
+            setNotification('Event confirmed!', 'success');
+            setKey(key + 1);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+
     return (
         <div className='centered-600px-container ' style={{ textAlign: 'center' }}>
             {event ? (
@@ -174,21 +185,32 @@ export const Event = () => {
                     ) : (
                         new Date(event.start_date) > new Date() ? (
                             <div>
-                                {/* Ticket selection dropdown */}
-                                <label htmlFor="ticket">Select a ticket:</label>
-                                <select id="ticket" onChange={(e) => handleTicketChange(JSON.parse(e.target.value))}>
-                                    <option value="">Choose a ticket</option>
-                                    {tickets.map((ticket) => (
-                                        <option key={ticket.id} value={JSON.stringify(ticket)}>
-                                            {ticket.amount > 0 ? (
-                                                `${ticket.title} - $${ticket.price} - ${ticket.amount} tickets left`
-                                            ) : (
-                                                `${ticket.title} - $${ticket.price} - SOLD OUT`
-                                            )}
-                                        </option>
-                                    ))}
-                                </select>
-                                {(event.confirmed_by != null) && <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>}
+                                {event.confirmed_by != null ? (
+                                    <div>
+                                        {/* Ticket selection dropdown */}
+                                        <label htmlFor="ticket">Select a ticket:</label>
+                                        <select id="ticket" onChange={(e) => handleTicketChange(JSON.parse(e.target.value))}>
+                                            <option value="">Choose a ticket</option>
+                                            {tickets.map((ticket) => (
+                                                <option key={ticket.id} value={JSON.stringify(ticket)}>
+                                                    {ticket.amount > 0 ? (
+                                                        `${ticket.title} - $${ticket.price} - ${ticket.amount} tickets left`
+                                                    ) : (
+                                                        `${ticket.title} - $${ticket.price} - SOLD OUT`
+                                                    )}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {(event.confirmed_by != null) && <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <h3>This event is not confirmed yet.</h3>
+                                        <button onClick={() => handleEventConfirm(event.id)} className='primary-btn'>
+                                            Confirm
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div></div>

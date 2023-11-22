@@ -47,7 +47,7 @@ export const AdminToDo = () => {
 
     const handleEventDelete = async (eventId) => {
         try {
-            const response = await axiosClient.delete(`/events/delete/${eventId}`);
+            const response = await axiosClient.delete(`/event/${eventId}`);
             console.log(response.data); // Log the response (optional)
             setEvents(events.filter((event) => event.id !== eventId));
         } catch (error) {
@@ -68,7 +68,7 @@ export const AdminToDo = () => {
 
     const handleLocationDelete = async (locationId) => {
         try {
-            const response = await axiosClient.delete(`/location/delete/${locationId}`);
+            const response = await axiosClient.delete(`/location/${locationId}`);
             console.log(response.data); // Log the response (optional)
             setLocations(locations.filter((location) => location.id !== locationId));
         } catch (error) {
@@ -89,7 +89,7 @@ export const AdminToDo = () => {
 
     const handleCategoryDelete = async (categoryId) => {
         try {
-            const response = await axiosClient.delete(`/categories/delete/${categoryId}`);
+            const response = await axiosClient.delete(`/category/${categoryId}`);
             console.log(response.data); // Log the response (optional)
             setCategories(categories.filter((category) => category.id !== categoryId));
         } catch (error) {
@@ -108,79 +108,97 @@ export const AdminToDo = () => {
             <h1>Todo</h1>
             <div className='centered-fullpage-container'>
                 <div>
-                    {events.length > 0 && <h2>Events to confirm:</h2>}
-                    <ul >
-                        {events.map((event) => (
-                            <li key={event.id} className="">
-                                <div className='left-start-aligned-flex-container'>
-                                    <span><strong>Name: </strong> {event.name}</span>
-                                    <span><strong>Date: </strong>{event.start_date} - {event.end_date}</span>
-                                </div>
-                                <div className='horizontal-buttons end-aligned-row-flex-container'>
-                                    <button onClick={() => handleEventOpen(event.id)} className='secondary-btn'>
-                                        More info
-                                    </button>
-                                    <button onClick={() => handleEventConfirm(event.id)} className='primary-btn'>
-                                        Confirm
-                                    </button>
-                                    <button onClick={() => handleEventDelete(event.id)} className='delete-btn'>
-                                        Delete
-                                    </button>
-                                </div>
+                    <h2 style={{ textAlign: 'left' }}>Events to confirm:</h2>
+                    {events.length > 0 ? (
+                        <ul >
+                            {events.map((event) => (
+                                <li key={event.id} className="">
+                                    <div className='left-start-aligned-flex-container'>
+                                        <span><strong>Name: </strong> {event.name}</span>
+                                        <span><strong>Date: </strong>{event.start_date} - {event.end_date}</span>
+                                    </div>
+                                    <div className='horizontal-buttons end-aligned-row-flex-container'>
+                                        <button onClick={() => handleEventOpen(event.id)} className='secondary-btn'>
+                                            More info
+                                        </button>
+                                        <button onClick={() => handleEventConfirm(event.id)} className='primary-btn'>
+                                            Confirm
+                                        </button>
+                                        <button onClick={() => handleEventDelete(event.id)} className='delete-btn'>
+                                            Delete
+                                        </button>
+                                    </div>
 
-                            </li>
-                        ))}
-                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <div>
+                            <h3>Nothing to be done</h3>
+                        </div>
+                    )}
                 </div>
                 <div>
-                    {locations.length > 0 && <h2>Locations to confirm:</h2>}
-                    <ul >
-                        {locations.map((location) => (
-                            <li key={location.id} className="">
-                                <div className='left-start-aligned-flex-container'>
-                                    <span><strong>Name: </strong> {location.name}</span>
-                                    <span><strong>Adress: </strong> {location.address_line_1}</span>
-                                    {/* <span><strong>Date: </strong>{location.start_date} - {location.end_date}</span> */}
-                                </div>
-                                <div className='horizontal-buttons end-aligned-row-flex-container'>
-                                    {/* <button onClick={() => handleEventOpen(location.id)} className='secondary-btn'> */}
-                                    {/* More info */}
-                                    {/* </button> */}
-                                    <button onClick={() => handleLocationConfirm(location.id)} className='primary-btn'>
-                                        Confirm
-                                    </button>
-                                    <button onClick={() => handleLocationDelete(location.id)} className='delete-btn'>
-                                        Delete
-                                    </button>
-                                </div>
+                <h2 style={{ textAlign: 'left' }}>Locations to confirm:</h2>
+                    {locations.length ? (
+                        <ul >
+                            {locations.map((location) => (
+                                <li key={location.id} className="">
+                                    <div className='left-start-aligned-flex-container'>
+                                        <span><strong>Name: </strong> {location.name}</span>
+                                        <span><strong>Adress: </strong> {location.address_line_1}</span>
+                                        {/* <span><strong>Date: </strong>{location.start_date} - {location.end_date}</span> */}
+                                    </div>
+                                    <div className='horizontal-buttons end-aligned-row-flex-container'>
+                                        {/* <button onClick={() => handleEventOpen(location.id)} className='secondary-btn'> */}
+                                        {/* More info */}
+                                        {/* </button> */}
+                                        <button onClick={() => handleLocationConfirm(location.id)} className='primary-btn'>
+                                            Confirm
+                                        </button>
+                                        <button onClick={() => handleLocationDelete(location.id)} className='delete-btn'>
+                                            Delete
+                                        </button>
+                                    </div>
 
-                            </li>
-                        ))}
-                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <div>
+                            <h3>Nothing to be done</h3>
+                        </div>
+                    )}
                 </div>
                 <div>
-                    {categories.length > 0 && <h2>Categories to confirm:</h2>}
-                    <ul >
-                        {categories.map((category) => (
-                            <li key={category.id} className="">
-                                <div className='left-start-aligned-flex-container'>
-                                    <span><strong>Name: </strong> {category.name}</span>
-                                </div>
-                                <div className='horizontal-buttons end-aligned-row-flex-container'>
-                                    {/* <button onClick={() => handleEventOpen(category.id)} className='secondary-btn'> */}
-                                    {/* More info */}
-                                    {/* </button> */}
-                                    <button onClick={() => handleCategoryConfirm(category.id)} className='primary-btn'>
-                                        Confirm
-                                    </button>
-                                    <button onClick={() => handleCategoryDelete(category.id)} className='delete-btn'>
-                                        Delete
-                                    </button>
-                                </div>
+                <h2 style={{ textAlign: 'left' }}>Categories to confirm:</h2>
+                    {categories.length > 0 ? (
+                        <ul >
+                            {categories.map((category) => (
+                                <li key={category.id} className="">
+                                    <div className='left-start-aligned-flex-container'>
+                                        <span><strong>Name: </strong> {category.name}</span>
+                                    </div>
+                                    <div className='horizontal-buttons end-aligned-row-flex-container'>
+                                        {/* <button onClick={() => handleEventOpen(category.id)} className='secondary-btn'> */}
+                                        {/* More info */}
+                                        {/* </button> */}
+                                        <button onClick={() => handleCategoryConfirm(category.id)} className='primary-btn'>
+                                            Confirm
+                                        </button>
+                                        <button onClick={() => handleCategoryDelete(category.id)} className='delete-btn'>
+                                            Delete
+                                        </button>
+                                    </div>
 
-                            </li>
-                        ))}
-                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <div>
+                            <h3>Nothing to be done</h3>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
