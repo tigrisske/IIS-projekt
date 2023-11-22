@@ -37,7 +37,7 @@ export const UpcomingCalendar = () => {
     }
 
     return (
-        <div style={{ margin: 'auto', width: '80%' }}>
+        <div style={{ marginTop: '20px', marginLeft: 'auto', marginRight: 'auto', width: '80vw' }}>
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"

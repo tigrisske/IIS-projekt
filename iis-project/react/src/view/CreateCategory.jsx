@@ -67,9 +67,9 @@ export const CreateCategory = () => {
         ref={nameRef}
         placeholder="Name"
       />
-      <button onClick={handleCreate}>Create</button>
-      <button onClick={showCategories}>Show categories</button>
-      <h2 style={{ fontWeight: 'bold' }}>Select a category:</h2>
+      <button onClick={handleCreate} className = 'primary-btn'>Create</button>
+      {/* <button onClick={showCategories}>Show categories</button> */}
+      <h2 style={{ fontWeight: 'bold' }}>Select a parent category:</h2>
       <div>
         {categories.map((category) => (
           <CategoryDropdown

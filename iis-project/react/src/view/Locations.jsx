@@ -54,6 +54,7 @@ export const Locations = () => {
     return (
         <div className="centered-600px-container">
             <h2>List of Locations</h2>
+            <button onClick={() => navigate('/createlocation')} className="primary-btn">Create location</button>
             <ul>
                 {locations.map((location) => (
                     <li key={location.id}>

@@ -40,11 +40,27 @@ export const nav = [
         protected_route: false
     },
     {
+        path: "/calendar",
+        name: "UpcomingCalendar",
+        element: <UpcomingCalendar />,
+        isMenu: true,
+        protected_route: true,
+        min_role: 'member'
+    },
+    {
         path: "/events",
         name: "Events",
         element: <Events />,
         isMenu: true,
         protected_route: false
+    },
+    {
+        path: "/myevents",
+        name: "MyEvents",
+        element: <MyEvents />,
+        isMenu: true,
+        protected_route: true,
+        min_role: 'member'
     },
     {
         path: "/event/:eventId",
@@ -65,7 +81,7 @@ export const nav = [
         path: "/categories",
         name: "Categories",
         element: <Categories />,
-        isMenu: false,
+        isMenu: true,
         protected_route: true,
         min_role: 'moderator'
     },
@@ -73,7 +89,7 @@ export const nav = [
         path: "/locations",
         name: "Locations",
         element: <Locations />,
-        isMenu: false,
+        isMenu: true,
         protected_route: true,
         min_role: 'moderator'
     },
@@ -94,26 +110,10 @@ export const nav = [
         min_role: 'admin'
     },
     {
-        path: "/location/:locationId",
-        name: "LocationDetail",
-        element: <LocationDetail />,
-        isMenu: false,
-        protected_route: true,
-        min_role: 'moderator'
-    },
-    {
-        path: "/myevents",
-        name: "Manage My Events",
-        element: <MyEvents />,
-        isMenu: true,
-        protected_route: true,
-        min_role: 'member'
-    },
-    {
         path: "/createevent",
         name: "Create Event",
         element: <CreateEvent />,
-        isMenu: true,
+        isMenu: false,
         min_role: 'member',
         protected_route: true
     },
@@ -121,7 +121,7 @@ export const nav = [
         path: "/createlocation",
         name: "Create Location",
         element: <CreateLocation />,
-        isMenu: true,
+        isMenu: false,
         min_role: 'member',
         protected_route: true
     },
@@ -129,7 +129,7 @@ export const nav = [
         path: "/createcategory",
         name: "Create Category",
         element: <CreateCategory />,
-        isMenu: true,
+        isMenu: false,
         min_role: 'member',
         protected_route: true
     },

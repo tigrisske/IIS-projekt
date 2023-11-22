@@ -13,7 +13,7 @@ class TicketSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
+        DB::table('tickets')->insert([
             [
                 'title' => 'VIP',
                 'price' => 100,
@@ -61,32 +61,29 @@ class TicketSeeder extends Seeder
                 'price' => 50,
                 'description' => 'Regular ticket',
                 'event_id' => 4,
-                'amount' => 150,
+                'amount' => 99999999,
+            ],
+            [
+                'title' => 'Student',
+                'price' => 0,
+                'description' => 'ticket',
+                'event_id' => 5,
+                'amount' => '300',
+            ],
+            [
+                'title' => 'Regular',
+                'price' => 100,
+                'description' => 'regular ticket',
+                'event_id' => 6,
+                'amount' => 4000,
             ],
             [
                 'title' => 'VIP',
-                'price' => 100,
+                'price' => 1000,
                 'description' => 'VIP ticket',
-                'event_id' => 5,
-                'amount' => '1000',
+                'event_id' => 6,
+                'amount' => 4000,
             ],
-            [
-                'title' => '1-Day',
-                'price' => 50,
-                'description' => 'Regular ticket',
-                'event_id' => 5,
-                'amount' => 9000,
-            ],
-            [
-                'title' => '3-Day',
-                'price' => 100,
-                'description' => 'VIP ticket',
-                'event_id' => 5,
-                'amount' => 20000,
-            ],
-        ];
-
-        DB::table('tickets')->insert($data);
-
+        ]);
     }
 }

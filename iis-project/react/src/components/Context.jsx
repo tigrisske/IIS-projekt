@@ -112,7 +112,9 @@ export const ContextProvider = ({ children }) => {
             setNotification,
         }}>
             <RenderMenu />
-            <ToastContainer />
+            <ToastContainer
+            className={'toast-position'}
+             />
             <main>
                 <RenderRoutes />
             </main>

@@ -72,6 +72,7 @@ export const Categories = () => {
     return (
         <div className="centered-600px-container">
             <h2>List of Categories</h2>
+            <button onClick={() => navigate('/createcategory')} className="primary-btn">Create category</button>
             <ul>
                 {categories.map((category) => (
                     <li key={category.id}>

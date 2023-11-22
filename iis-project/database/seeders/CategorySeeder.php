@@ -17,32 +17,62 @@ class CategorySeeder extends Seeder
                 'name' => 'Sport',
                 'parent_id' => null,
                 'created_by' => 1,
+                'confirmed_by' => 1,
 
             ],
             [
-                'name' => 'Futbalovy zapas',
-                'parent_id' => 1,
-                'created_by' => 1,
-            ],
-            [
-                'name' => 'UFC zapas',
-                'parent_id' => 1,
-                'created_by' => 1,
-            ],
-            [
-                'name' => 'Kultura',
+                'name' => 'Culture',
                 'parent_id' => null,
                 'created_by' => 1,
+                'confirmed_by' => 1,
             ],
             [
-                'name' => 'Politika',
+                'name' => 'Entertainment',
                 'parent_id' => null,
                 'created_by' => 1,
+                'confirmed_by' => 1,
             ],
             [
-                'name' => 'Hudba',
+                'name' => 'Politics',
+                'parent_id' => null,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'Football',
+                'parent_id' => 1,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'BJJ',
+                'parent_id' => 1,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'Hockey',
+                'parent_id' => 1,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'NHL',
+                'parent_id' => 7,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'Fighting',
+                'parent_id' => 3,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
+            [
+                'name' => 'Elections',
                 'parent_id' => 4,
                 'created_by' => 1,
+                'confirmed_by' => 1,
             ]
         ]);
     }

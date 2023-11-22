@@ -34,13 +34,13 @@ export const Dashboard = () => {
     return (
         <div>
             <h1>Welcome to the Dashboard, {user.name}!</h1>
-            <button onClick={_user}>My profile</button>
-            <button onClick={checkLogin}>Verify Login</button>
+            {/* <button onClick={_user}>My profile</button> */}
+            {/* <button onClick={checkLogin}>Verify Login</button> */}
             {user.role === 'admin' && (
                 <div>
-                    <h2>Admin Dashboard Content</h2>
-                    <button onClick={manage_categories}>Manage categories</button>
-                    <button onClick={manage_locations}>Manage locations</button>
+                    {/* <h2>Admin Dashboard Content</h2> */}
+                    {/* <button onClick={manage_categories}>Manage categories</button> */}
+                    {/* <button onClick={manage_locations}>Manage locations</button> */}
                     <AdminToDo />
                 </div>
             )}

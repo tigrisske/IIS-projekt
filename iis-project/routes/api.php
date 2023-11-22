@@ -27,6 +27,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('/auth', [AuthController::class, 'auth']);
 
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/finishedevents', [EventController::class, 'index_finished']);
     Route::get('/myevents', [EventController::class, 'index2']);
     Route::get('/event/{id}', [EventController::class, 'show']);
     Route::get('/event/{id}/reviews', [EventController::class, 'getReviews']);
