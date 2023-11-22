@@ -59,6 +59,9 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 
 Route::middleware(['web','auth', 'role:moderator'])->group(function () {
+
+    Route::post('/update_category/{categoryId}', [CategoryController::class, 'update']);
+
     Route::delete('/review/{id}', [ReviewController::class,'destroy']);
 
     Route::delete('/event/{eventId}', [EventController::class, 'destroy']);
