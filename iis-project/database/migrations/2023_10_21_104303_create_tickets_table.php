@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->decimal('price', 10, 2); // 10 digits in total, 2 after the decimal point
-            $table->text('description')->nullable(); // Optional
-            $table->foreignId('event_id')->constrained('events');
+            $table->text('description')->nullable(); // Optional description of the ticket
             $table->integer('amount')->default(1);
+            $table->unsignedBigInteger('event_id');
             $table->timestamps();
+
+            // Foreign keys
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 

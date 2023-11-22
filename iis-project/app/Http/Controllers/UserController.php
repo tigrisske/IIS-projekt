@@ -83,7 +83,6 @@ class UserController extends Controller
      */
     public function show(User $user, $userId)
     {
-        //return the user date based on id 
         $user = User::find($userId);
         return response()->json($user);
     }

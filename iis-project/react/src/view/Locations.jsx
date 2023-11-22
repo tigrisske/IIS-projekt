@@ -41,8 +41,8 @@ export const Locations = () => {
         }
     };
 
-    const onEditClick = async (locationId) => {
-        
+    const onMoreInfoClick = async (locationId) => {
+        navigate(`/location/${locationId}`);
     };
 
     const handlePageChange = (newPage) => {
@@ -65,7 +65,7 @@ export const Locations = () => {
                             <span><strong>Country: </strong> {location.country}</span>
                         </div>
                         <div className="horizontal-buttons end-aligned-row-flex-container">
-                            <button onClick={() => onEditClick(location.id)} className="secondary-btn">
+                            <button onClick={() => onMoreInfoClick(location.id)} className="secondary-btn">
                                 MoreInfo
                             </button>
                             <button onClick={() => onDeleteClick(location.id)} className="delete-btn">

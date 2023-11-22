@@ -64,6 +64,9 @@ Route::middleware(['web','auth', 'role:moderator'])->group(function () {
 
     Route::delete('/review/{id}', [ReviewController::class,'destroy']);
 
+    Route::get('/location/{locationId}', [LocationController::class, 'show']);
+    Route::get('/category/{categoryId}', [CategoryController::class, 'show']);
+
     Route::delete('/event/{eventId}', [EventController::class, 'destroy']);
     Route::delete('/location/{locationId}', [LocationController::class, 'destroy']);
     Route::delete('/category/{categoryId}', [CategoryController::class, 'destroy']);
@@ -75,6 +78,8 @@ Route::middleware(['web','auth', 'role:moderator'])->group(function () {
     Route::get('/unconfirmed_events', [EventController::class, 'getUnConfirmed']);
     Route::get('/unconfirmed_categories', [CategoryController::class, 'getUnconfirmed']);
     Route::get('/unconfirmed_locations', [LocationController::class, 'getUnconfirmed']);
+
+    Route::put('/location/{locationId}', [LocationController::class, 'update']);
 });
 
 Route::middleware(['web', 'auth', 'role:admin'])->group(function () {

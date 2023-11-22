@@ -194,6 +194,26 @@ export const Event = () => {
                             <div></div>
                         )
                     )}
+                    {event ? (<div>
+
+                        {(user.id === event.created_by) && <button onClick={() => handleDelete()}>Delete</button>}
+                        {(user.id === event.created_by) && eventUsers.length > 0 && (
+                            <div>
+                                <h3>Users who have sent a login request:</h3>
+                                <button onClick={() => handleApproveAll()}>Approve All</button>
+                                <ul>
+                                    {eventUsers.map((user) => (
+                                        <li key={user.id}>
+                                            <p>{user.first_name} {user.last_name}</p>
+                                            <button onClick={() => handleApprove(user.id)}>Approve</button>
+                                            <button onClick={() => handleDecline(user.id)}>Decline</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>)
+                        : (null)}
                     {new Date(event.start_date) < new Date() ? (
                         <Reviews eventId={eventId} />
                     ) : (
@@ -210,27 +230,6 @@ export const Event = () => {
             {errorMessage && (
                 <div style={{ color: isError ? 'red' : 'green' }}>{errorMessage}</div>
             )}
-            {event ? (<div>
-
-                {(user.id === event.created_by) && <button onClick={() => handleDelete()}>Delete</button>}
-                {(user.id === event.created_by) && eventUsers.length > 0 && (
-                    <div>
-                        <h3>Users who have sent a login request:</h3>
-                        <button onClick={() => handleApproveAll()}>Approve All</button>
-                        <ul>
-                            {eventUsers.map((user) => (
-                                <li key={user.id}>
-                                    <p>{user.first_name} {user.last_name}</p>
-                                    <button onClick={() => handleApprove(user.id)}>Approve</button>
-                                    <button onClick={() => handleDecline(user.id)}>Decline</button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>)
-                : (null)}
-
         </div>
     );
 };

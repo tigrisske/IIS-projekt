@@ -50,10 +50,10 @@ class LocationController extends Controller
         $location = Location::create([
             'name' => $data['name'],
             'address_line_1' => $data['address_line_1'],
-            'city' => $data['city'], 
+            'city' => $data['city'],
             'zip_code' => $data['zip_code'],
-            'country' => $data['country'], 
-            'description' => $data['description'], 
+            'country' => $data['country'],
+            'description' => $data['description'],
             'created_by' => $user->id
         ]);
 
@@ -64,7 +64,7 @@ class LocationController extends Controller
     public function confirmLocation(Location $location, $locationId)
     {
         $location = Location::find($locationId);
-        if(!$location){
+        if (!$location) {
             return response()->json(['message' => 'Location not found.'], 401);
         }
         $location->confirmed_by = Auth::user()->id;
@@ -83,9 +83,10 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Location $location)
+    public function show(Location $location, $userId)
     {
-        //
+        $location = Location::find($userId);
+        return response()->json($location);
     }
 
     /**
@@ -99,9 +100,13 @@ class LocationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Location $location)
+    public function update(Request $request, $locationId)
     {
-        //
+        $location = Location::find($locationId);
+
+        $location->update($request->all());
+
+        return response()->json(['message' => 'Location updated successfully', 'location' => $location]);
     }
 
     /**

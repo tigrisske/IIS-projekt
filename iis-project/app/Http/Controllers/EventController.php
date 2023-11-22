@@ -22,7 +22,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 4); // Number of events per page, default is 10
+        $perPage = $request->input('perPage', 9); // Number of events per page, default is 9
         $page = $request->input('page', 1); // Current page, default is 1
 
         $events = Event::join('locations', 'events.location_id', '=', 'locations.id')
@@ -72,8 +72,6 @@ class EventController extends Controller
             'confirmed_by' => null,
             'created_by' => $user->id,
             'pay_in_advance' => $data['pay_in_advance'],
-            // 'ticket_data' =>$data['ticket_data']
-
         ]);
 
         //destructure ticket_data

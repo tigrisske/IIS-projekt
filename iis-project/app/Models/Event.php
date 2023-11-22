@@ -10,29 +10,30 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 
+        'name',
         'start_date',
-        'end_date', 
-        'capacity', 
-        'description', 
-        'category_id', 
-        'location_id', 
+        'end_date',
+        'capacity',
+        'description',
+        'category_id',
+        'location_id',
         'confirmed_by',
         'created_by',
         'pay_in_advance',
-        'ticket_data'
     ];
 
-    public function images()
-    {
-        return $this->hasMany(Image::class);
-    }
 
+    /**
+     * Get all possible ticket options for the event.
+     */
     public function tickets()
     {
-        return $this->belongsToMany(Ticket::class, 'event_ticket');
+        return $this->hasMany(Ticket::class, 'tickets');
     }
 
+    /**
+     * Get all of the event's reviews.
+     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
@@ -43,7 +44,7 @@ class Event extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class, 'event_user');
     }
 
 }

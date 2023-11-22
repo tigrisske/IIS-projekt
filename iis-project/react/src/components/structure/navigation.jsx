@@ -10,10 +10,11 @@ import { CreateLocation } from "../../view/CreateLocation"
 import { CreateCategory } from "../../view/CreateCategory"
 import { SignUp } from "../../view/SignUp"
 import { MyEvents } from "../../view/MyEvents"
-import {Event} from "../../view/Event"
+import { Event } from "../../view/Event"
 import { Navigate } from "react-router-dom"
 import { Categories } from "../../view/Categories"
 import { Locations } from "../../view/Locations"
+import { LocationDetail } from "../Location"
 
 
 export const nav = [
@@ -45,37 +46,21 @@ export const nav = [
         isMenu: true,
         protected_route: false
     },
-{
+    {
         path: "/event/:eventId",
         name: "Event",
-        element: <Event/>,
+        element: <Event />,
         isMenu: false,
         protected_route: false
     },
     {
-        path: "/users",
-        name: "Users",
-        element: <UsersBoard />,
+        path: "/calendar",
+        name: "My Calendar",
+        element: <UpcomingCalendar />,
         isMenu: true,
         protected_route: true,
-        min_role: 'admin'
+        min_role: 'member'
     },
-    {
-        path: "/user/:userId",
-        name: "UserDetail",
-        element: <UserDetail />,
-        isMenu: false,
-        protected_route: true,
-        min_role: 'admin'
-    },
-    // {
-    //     path: "/profile",
-    //     name: "Profile",
-    //     element: <Profile />,
-    //     isMenu: true,
-    //     protected_route: true,
-    //     min_role: 'member'
-    // },
     {
         path: "/categories",
         name: "Categories",
@@ -93,16 +78,32 @@ export const nav = [
         min_role: 'moderator'
     },
     {
-        path: "/calendar",
-        name: "UpcomingCalendar",
-        element: <UpcomingCalendar />,
+        path: "/users",
+        name: "Users",
+        element: <UsersBoard />,
         isMenu: true,
         protected_route: true,
-        min_role: 'member'
+        min_role: 'admin'
+    },
+    {
+        path: "/user/:userId",
+        name: "UserDetail",
+        element: <UserDetail />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'admin'
+    },
+    {
+        path: "/location/:locationId",
+        name: "LocationDetail",
+        element: <LocationDetail />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'moderator'
     },
     {
         path: "/myevents",
-        name: "MyEvents",
+        name: "Manage My Events",
         element: <MyEvents />,
         isMenu: true,
         protected_route: true,
@@ -113,7 +114,7 @@ export const nav = [
         name: "Create Event",
         element: <CreateEvent />,
         isMenu: true,
-        min_role : 'member',
+        min_role: 'member',
         protected_route: true
     },
     {
@@ -121,15 +122,15 @@ export const nav = [
         name: "Create Location",
         element: <CreateLocation />,
         isMenu: true,
-        min_role : 'member',
+        min_role: 'member',
         protected_route: true
     },
     {
         path: "/createcategory",
         name: "Create Category",
-        element: <CreateCategory/>,
+        element: <CreateCategory />,
         isMenu: true,
-        min_role : 'member',
+        min_role: 'member',
         protected_route: true
     },
     {

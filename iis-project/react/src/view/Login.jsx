@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useStateContext } from "../components/Context.jsx";
-import '../components/styles/Main.css';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
