@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context';
-import { set } from 'date-fns';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Reviews from '../components/Reviews';
+
 
 export const Event = () => {
     const [event, setEvent] = useState(null);
@@ -206,9 +205,6 @@ export const Event = () => {
                                 ) : (
                                     <div>
                                         <h3>This event is not confirmed yet.</h3>
-                                        <button onClick={() => handleEventConfirm(event.id)} className='primary-btn'>
-                                            Confirm
-                                        </button>
                                     </div>
                                 )}
                             </div>

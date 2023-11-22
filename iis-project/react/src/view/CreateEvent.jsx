@@ -188,7 +188,7 @@ export const CreateEvent = () => {
     return (
         <div>
             <h1 className="create-event">Create your event!</h1>
-            <input type="text" ref={nameRef} placeholder="Name" />
+            <input type="text" ref={nameRef} placeholder="Name"/>
             <div>
                 <label>Start Date:</label>
                 <DatePicker
@@ -235,7 +235,7 @@ export const CreateEvent = () => {
                     />
                 </div>
             </div>
-            <input type="text" ref={capacityRef} placeholder="capacity" disabled={isUnlimited} />
+            <input type="number" ref={capacityRef} placeholder="capacity" disabled={isUnlimited} />
             <label htmlFor="unlimitedCheckbox">Unlimited</label>
             <input
                 type="checkbox"

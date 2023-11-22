@@ -86,6 +86,14 @@ export const nav = [
         min_role: 'moderator'
     },
     {
+        path: "/location/:locationId",
+        name: "Location",
+        element: <LocationDetail />,
+        isMenu: false,
+        protected_route: true,
+        min_role: 'moderator'
+    },
+    {
         path: "/users",
         name: "Users",
         element: <UsersBoard />,

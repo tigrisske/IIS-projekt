@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from '../axios-client';
 import Event from '../components/EventItem.jsx';
+import { useNavigate } from 'react-router-dom';
+import { useStateContext } from "../components/Context.jsx";
 
 export const Events = () => {
     const [events, setEvents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [finishedEvents, setFinishedEvents] = useState(false);
+    const { user } = useStateContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -34,7 +38,14 @@ export const Events = () => {
     return (
         <div>
             <h1>Events</h1>
-            <button onClick={() => navigate('/createevent')} className="primary-btn">Create an event</button>
+            {}
+            {user.isAuthenticated == true && (
+                <div>
+                    <button onClick={() => navigate('/createevent')} className="primary-btn">Create new event</button>
+                    <button onClick={() => navigate('/createcategory')} className="primary-btn">Create new category</button>
+                    <button onClick={() => navigate('/createlocation')} className="primary-btn">Create new location</button>
+                </div>
+            )}
             <div>
                 <div className="end-aligned-row-flex-container">
                     <form className="radio-form">

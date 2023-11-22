@@ -38,7 +38,11 @@ export const LocationDetail = () => {
     };
 
     const handleApplyChanges = async () => {
-        console.log(editedLocation);
+        // validate editedLocation data
+        if (editedLocation.name === '' || editedLocation.address_line_1 === '' || editedLocation.city === '' || editedLocation.zip_code === '' || editedLocation.country === '') {
+            setNotification('Please fill in all required fields', 'error');
+            return;
+        }
         await axiosClient.put(`/location/${locationId}`, editedLocation)
             .then((response) => {
                 console.log(response.data.message);
@@ -46,9 +50,8 @@ export const LocationDetail = () => {
                 setIsEditing(false);
                 setNotification(response.data.message, 'success')
             })
-            .catch((response) => {
-                console.log(`Error updating location! ${response}`);
-                setNotification(response.data.message, 'error')
+            .catch((error) => {
+                setNotification('Error', 'error');
             });
     };
 
@@ -68,17 +71,17 @@ export const LocationDetail = () => {
                         <div className="full-width">
                             <h2>Editing location: {location.name}</h2>
                             <form className='left-start-aligned-flex-container'>
-                                <label htmlFor="name">Location Title</label>
+                                <label className='required' htmlFor="name">Location Title</label>
                                 <input type="text" id="name" name="name" value={editedLocation.name} onChange={handleInputChange} />
-                                <label htmlFor="address_line_1">Address Line 1</label>
+                                <label className='required' htmlFor="address_line_1">Address Line 1</label>
                                 <input type="text" id="address_line_1" name="address_line_1" value={editedLocation.address_line_1} onChange={handleInputChange} />
                                 <label htmlFor="address_line_2">Address Line 2</label>
                                 <input type="text" id="address_line_2" name="address_line_2" value={editedLocation.address_line_2} onChange={handleInputChange} />
-                                <label htmlFor="city">City</label>
+                                <label className='required' htmlFor="city">City</label>
                                 <input type="text" id="city" name="city" value={editedLocation.city} onChange={handleInputChange} />
-                                <label htmlFor="zip_code">Zip Code</label>
+                                <label className='required' htmlFor="zip_code">Zip Code</label>
                                 <input type="text" id="zip_code" name="zip_code" value={editedLocation.zip_code} onChange={handleInputChange} />
-                                <label htmlFor="country">Country</label>
+                                <label className='required' htmlFor="country">Country</label>
                                 <input type="text" id="country" name="country" value={editedLocation.country} onChange={handleInputChange} />
                                 <label htmlFor="description">Description</label>
                                 <textarea id="description" name="description" value={editedLocation.description} onChange={handleInputChange} />

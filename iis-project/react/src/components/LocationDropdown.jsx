@@ -33,7 +33,7 @@ export const LocationDropdown = ({ onSelect }) => {
         <option value="">Select a location</option>
         {locations.map((location) => (
           <option key={location.id} value={location.id}>
-            {location.name} (capacity: {location.capacity})
+            {location.name}
           </option>
         ))}
       </select>

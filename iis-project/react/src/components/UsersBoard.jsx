@@ -10,6 +10,7 @@ export const UsersBoard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     const navigate = useNavigate();
+    const { setNotification } = useStateContext();
 
     useEffect(() => {
         fetchUsers(currentPage);
@@ -35,7 +36,7 @@ export const UsersBoard = () => {
             setUsers(users.filter((user) => user.id !== userIdToDelete));
         } catch (error) {
             console.error('Error deleting user:', error);
-            // Handle errors, show error messages, etc.
+            setNotification('Error deleting user! Make sure the user has no events, categories, locations or reviews associated with them.', 'error');
         }
     };
 

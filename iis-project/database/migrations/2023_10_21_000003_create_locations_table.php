@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('zip_code');
             $table->string('country');
             $table->text('description')->nullable(); // Description of the location
-            $table->unsignedBigInteger('capacity')->nullable();
             $table->unsignedBigInteger('created_by'); // The user who created the location
             $table->unsignedBigInteger('confirmed_by')->nullable(); // NULL means that the location is not confirmed yet
             $table->timestamps();

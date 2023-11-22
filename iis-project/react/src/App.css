@@ -305,3 +305,8 @@ span {
 .toast-position {
     top: 50px !important;
 }
+
+.required::after {
+    content: "*";
+    color: red;
+}
