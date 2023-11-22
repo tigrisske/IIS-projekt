@@ -188,7 +188,7 @@ export const Event = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>
+                                {(event.confirmed_by != null) && <button onClick={() => handleJoin(eventId)} className='primary-btn'>Join</button>}
                             </div>
                         ) : (
                             <div></div>

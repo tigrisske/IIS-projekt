@@ -47,6 +47,18 @@ class LocationSeeder extends Seeder
                 'created_by'=> 1,
                 'confirmed_by'=> 1,
             ]
+            ,
+            [
+                'name' => 'VUT FIT',
+                'address_line_1' => 'Božetěchova 1/2',
+                'city' => 'Brno',
+                'zip_code' => '612 00',
+                'country' => 'Česká republika',
+                'description' => 'Fakulta informačních technologií Vysokého učení technického v Brně je jednou z předních institucí v oblasti informačních technologií ve střední Evropě. Nabízí široké spektrum studijních programů a moderních laboratoří.',
+                'capacity' => 5000,
+                'created_by' => 1,
+                'confirmed_by' => 1,
+            ],
         ];
 
         DB::table('locations')->insert($data);

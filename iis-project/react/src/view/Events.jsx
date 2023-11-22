@@ -4,16 +4,20 @@ import Event from '../components/EventItem.jsx';
 import './styles/EventsView.css';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../components/Context.jsx';
+import { set } from "date-fns";
+import { is } from "date-fns/locale";
 
 export const Events = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [finishedEvents, setFinishedEvents] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosClient.get(`/events?page=${currentPage}`);
+        let route = finishedEvents ? `/finishedevents?page=${currentPage}` : `/events?page=${currentPage}`;
+        const response = await axiosClient.get(route);
         setEvents(response.data.data); // Use response.data.data for Laravel pagination
         setTotalPages(response.data.last_page);
       } catch (error) {
@@ -22,15 +26,21 @@ export const Events = () => {
     };
 
     fetchEvents();
-  }, [currentPage]);
+  }, [currentPage, finishedEvents]);
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
 
+
+  const handleEventsButton = () => {
+    setFinishedEvents(!finishedEvents);
+  }
+
   return (
     <div>
       <h1>Events</h1>
+      { finishedEvents ?  (<button onClick={handleEventsButton}>Show current events</button>) : (<button onClick={handleEventsButton}>Show finished events</button>) }
       <ul className="app-body">
         {events.map((event) => (
           <Event key={event.id} {...event} />
