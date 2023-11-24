@@ -6,11 +6,17 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
+use \Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource. With pagination.
+     * Get a listing of confirmed categories with pagination.
+     * 
+     * In the get request, can be specified the number of events per page and the current page.
+     * 
+     * @param Request $request Request object
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -29,6 +35,8 @@ class CategoryController extends Controller
 
     /**
      * Get all categories.
+     * 
+     * @return JsonResponse
      */
     public function getAllCategories()
     {
@@ -37,6 +45,12 @@ class CategoryController extends Controller
         return Response::json($categories);
     }
 
+    /**
+     * Get all categories with nested children. This is a recursive function.
+     * 
+     * @param int $parentId ID of the parent category
+     * @return array Array of categories
+     */
     private function getNestedCategories($parentId = null)
     {
         $categories = Category::where('parent_id', $parentId)
@@ -52,29 +66,42 @@ class CategoryController extends Controller
 
 
     /**
-     * Show the form for creating a new resource.
+     * Create a new category.
+     * 
+     * @return JsonResponse
      */
     public function create(Request $request)
     {
         $data = $request;
         $user = Auth::user();
-        $category = Category::create([
+        Category::create([
             'name' => $data['name'],
             'parent_id' => $data['parent_id'],
             'created_by' => $user->id,
         ]);
-
-
         return response()->json(['message' => 'Category created']);
+
     }
 
+    /**
+     * Get all unconfirmed categories.
+     * 
+     * @return JsonResponse
+     */
     public function getUnconfirmed()
     {
         $categories = Category::where('confirmed_by', null)->get();
         return Response::json($categories);
     }
 
-    public function confirmCategory(Category $category, $categoryId)
+    /**
+     * Confirm a category.
+     * 
+     * @param Category $category
+     * @param int $categoryId ID of the category to confirm
+     * @return JsonResponse
+     */
+    public function confirmCategory($categoryId)
     {
         $category = Category::find($categoryId);
         if (!$category) {
@@ -86,6 +113,33 @@ class CategoryController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     * 
+     * @param Request $request Request object
+     * @param int $categoryId ID of the category to update
+     * @return JsonResponse
+     */
+    public function update(Request $request, $categoryId)
+    {
+        $category = Category::find($categoryId);
+        //change the name of the category
+        $category->name = $request->name;
+        $category->save();
+        return response()->json(['message' => 'Category updated.'], 200);
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * 
+     * @param int $categoryId ID of the category to delete
+     */
+    public function destroy($categoryId)
+    {
+        Category::where('id', $categoryId)->delete();
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -94,7 +148,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified resource.
      */
     public function show(Category $category)
     {
@@ -109,26 +163,5 @@ class CategoryController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $categoryId)
-    {
-        $category =  Category::find($categoryId);
-        //change the name of the category
-        $category->name = $request->name;
-        $category->save();
-        return response()->json(['message' => 'Category updated.'], 200);
 
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category, $categoryId)
-    {
-        $category = Category::find($categoryId);
-
-        Category::where('id', $categoryId)->delete();
-    }
 }

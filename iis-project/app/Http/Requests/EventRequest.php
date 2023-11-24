@@ -29,7 +29,6 @@ class EventRequest extends FormRequest
             'description' => 'required|string|max:10000',
             'category_id' => 'required|exists:categories,id',
             'location_id' => 'required|exists:locations,id',
-            'ticket_data' => 'array|required',
             'pay_in_advance' => 'required',
             'ticket_data.*.name' => 'required|string|max:255',
             'ticket_data.*.price' => 'required|numeric|min:0',

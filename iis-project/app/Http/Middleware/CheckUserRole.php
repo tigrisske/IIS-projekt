@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckUserRole
 {
+    /**
+     * Compare the role of the user with the role specified in the request.
+     * 
+     * @param string $userRole Role of the user
+     * @param string $role Minimum role required to access the resource
+     * @return bool True if the user's role is greater or equal to the role specified in the request, false otherwise
+     */
     protected function compareRoles($userRole, $role)
     {
         $roles = [

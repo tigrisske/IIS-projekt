@@ -36,7 +36,7 @@ function Event(event) {
     return (
         <div className='event-card'>
             <div onClick={handleClick}>
-                <img src='../../../public/background-image.jpg' />
+                <img src='/background-image.jpg' />
                 <h3 className={event.name.length > 15 ? "long-name" : "name"}>{limitedName}</h3>
 
                 <span>{getDate(event.start_date)} - {getDate(event.end_date)}</span>

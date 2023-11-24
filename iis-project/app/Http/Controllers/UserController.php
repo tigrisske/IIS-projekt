@@ -1,30 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SignupRequest;
-use App\Http\Requests\LoginRequest;
+use \Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request)
-    {
-        $id = Auth::id();
-        $user = User::find($id);
-        return response()->json($user);
-    }
-
     /**
      * Get the events that the user is registered for.
+     * 
+     * @param Request $request Request object
+     * @return JsonResponse JSON response with the list of events
      */
     public function getUpcomingEvents(Request $request)
     {
@@ -36,7 +25,12 @@ class UserController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * Get a listing of users with pagination.
+     * 
+     * In the get request, can be specified the number of events per page and the current page.
+     * 
+     * @param Request $request Request object
+     * @return JsonResponse JSON response with the list of users
      */
     public function index(Request $request)
     {
@@ -49,6 +43,13 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    /**
+     * Update the role of a user.
+     * 
+     * @param Request $request Request object
+     * @param int $id ID of the user
+     * @return JsonResponse JSON response with a message indicating success or failure
+     */
     public function updateRole(Request $request, $id)
     {
         $user = User::findOrFail($id); // Fetch the user by ID
@@ -80,8 +81,10 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @param int $userId ID of the user
      */
-    public function show(User $user, $userId)
+    public function show($userId)
     {
         $user = User::find($userId);
         return response()->json($user);
@@ -105,6 +108,9 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param int $id ID of the user
+     * @return JsonResponse JSON response with a message indicating success or failure
      */
     public function destroy($id)
     {

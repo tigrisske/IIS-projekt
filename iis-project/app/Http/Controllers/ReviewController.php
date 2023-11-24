@@ -4,21 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use \Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
 
-    public function createReview($eventId, Request $request)
-    {
-        $review = new Review();
-        $review->rating = $request->rating;
-        $review->comment = $request->comment;
-        $review->event_id = $eventId;
-        $review->user_id = auth()->id();
-        $review->save();
-    }
     /**
-     * Display a listing of the resource.
+     * Get a listing of reviews for a specific event with pagination.
+     * 
+     * In the get request, can be specified the number of current page.
+     * 
+     * @param int $eventId ID of the event
+     * @return JsonResponse JSON response with the list of reviews
      */
     public function index($eventId)
     {
@@ -78,6 +75,9 @@ class ReviewController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param int $id ID of the review to delete
+     * @return JsonResponse JSON response with the message of success or failure
      */
     public function destroy($id)
     {

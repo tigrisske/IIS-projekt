@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -12,20 +11,25 @@ use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
+    /**
+     * Handle an authentication attempt. 
+     */
     public function login(LoginRequest $request)
     {
         $data = $request->validated();
 
         if (Auth::attempt($data)) {
-            // $session = $request->session()-regenerate();
             $request->session()->regenerate();
-            // $session_id = $session->getId();
             $user = User::find(Auth::id());
-            return response()->json(['message' => 'Authentication successful', 'user' => $user], 200); //->headers('SESSION_ID', $session_id);
+            return response()->json(['message' => 'Authentication successful', 'user' => $user], 200); 
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
+
+    /**
+     * Handle a registration request of a new user.
+     */
     public function register(SignupRequest $request)
     {
         $data = $request->validated();
@@ -43,17 +47,16 @@ class AuthController extends Controller
         return response()->json(['message' => 'Account created and logged in!', 'user' => $user], 200);
     }
 
+    /**
+     * Handle a logout request. 
+     */
     public function logout(Request $request)
     {
         logger($request->session()->all());
+        
         // Check if the user is authenticated
-
-
-        // $request->session()->invalidate();
         if (Auth::check()) {
-            // Log out the authenticated user
-            Auth::logout();
-            // $request->session()->regenerateToken();
+            Auth::logout();// Log out the authenticated user
             return response()->json(['message' => 'Successfully logged out']);
         }
 
@@ -61,6 +64,9 @@ class AuthController extends Controller
         return response()->json(['message' => 'User not authenticated'], 401);
     }
 
+    /**
+     * Check if the user is authenticated. For testing if the session is working.
+     */
     public function auth(Request $request)
     {
         if (Auth::check()) {
