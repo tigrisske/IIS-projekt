@@ -85,7 +85,7 @@ export const ContextProvider = ({ children }) => {
     const logout = async () => {
         axiosClient.post('/logout', { withCredentials: true })
             .then(() => {
-                setUser({ ...user, isAuthenticated: false })
+                setUser({ name: undefined, id: undefined, role: undefined, isAuthenticated: false })
                 localStorage.removeItem('user')
                 navigate('/')
                 setNotification('Logout successful!', 'success');

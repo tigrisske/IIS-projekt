@@ -15,7 +15,7 @@ export const Event = () => {
     const [currentPage, setCurrentPage] = useState(1); // Current page for reviews
     const [tickets, setTickets] = useState([]); // Tickets for the event
     const [selectedTicket, setSelectedTicket] = useState(null);
-    const [isMyEvent, setIsMyEvent] = useState(undefined);
+    const [isMyEvent, setIsMyEvent] = useState(false);
     const { user, setNotification } = useStateContext();
     const [key, setKey] = useState(0);
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const Event = () => {
     useEffect(() => {
         const fetchEventUsers = async () => {
             try {
-                if (eventId && event && event.pay_in_advance) {
+                if (eventId && event && event.pay_in_advance && event.created_by === user.id) {
                     const response = await axiosClient.get(`/event/${eventId}/users`);
                     setEventUsers(response.data.users);
                     console.log(response.data);
@@ -64,20 +64,26 @@ export const Event = () => {
         };
 
         fetchEventUsers();
-    }, [eventId, event, key]);
+    }, [eventId, event, key, user]);
 
     const handleJoin = async (id) => {
         try {
-            // Check if a ticket is selected
-            if (selectedTicket) {
-                const response = await axiosClient.post(`/event/${id}/join/ticket/${selectedTicket.id}`);
-                setIsError(false);
-                setIsJoined(true);
+            if (user.isAuthenticated === false) {
+                setNotification('You need to login first!', 'error');
+                navigate('/login');
             } else {
-                // Show an error if no ticket is selected
-                setIsError(true);
-                setErrorMessage('Please select a ticket before joining the event.');
+                // Check if a ticket is selected
+                if (selectedTicket) {
+                    const response = await axiosClient.post(`/event/${id}/join/ticket/${selectedTicket.id}`);
+                    setIsError(false);
+                    setIsJoined(true);
+                } else {
+                    // Show an error if no ticket is selected
+                    setIsError(true);
+                    setErrorMessage('Please select a ticket before joining the event.');
+                }
             }
+
         } catch (error) {
             setIsError(true);
             setErrorMessage(`Error joining event! ${error.response.data.message}`);
