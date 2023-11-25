@@ -33,8 +33,8 @@ class EventSeeder extends Seeder
             ],
             [
                 'name' => 'Rytmus BENGORO 2 Krst',
-                'start_date' => '2023-12-15 18:00:00',
-                'end_date' => '2023-12-12 22:00:00',
+                'start_date' => '2023-12-12 22:00:00',
+                'end_date' => '2023-12-15 18:00:00',
                 'capacity' => 20000,
                 'description' => 'Damy a pani prichadza druhy diel slavneho albumu BENGORO od Rytmusa.',
                 'category_id' => 1,
