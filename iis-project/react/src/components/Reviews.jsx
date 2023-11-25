@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
-import { useParams } from 'react-router-dom';
 import { FaStar } from "react-icons/fa";
 import { useStateContext } from "../components/Context.jsx";
 
@@ -47,16 +46,22 @@ export const Reviews = ({ eventId }) => {
     }
 
     const handleReviewSubmit = async () => {
-        try {
-            await axiosClient.post(`/event/${eventId}/reviews`, { rating: currentValue, comment: document.querySelector('textarea').value });
-            setSubmitted(true); // Set submitted state to true after successful submission
-            setHoverValue(0);
-            setCurrentValue(0);
-            document.querySelector('textarea').value = '';
-            setNotification('Review submitted successfully!', 'success');
-        } catch (error) {
-            setNotification('Review submission failed! ' + error, 'error');
+        if (user.isAuthenticated === false) {
+            setNotification('You must be logged in to submit a review!', 'error');
+            return;
+        } else {
+            try {
+                await axiosClient.post(`/event/${eventId}/reviews`, { rating: currentValue, comment: document.querySelector('textarea').value });
+                setSubmitted(true); // Set submitted state to true after successful submission
+                setHoverValue(0);
+                setCurrentValue(0);
+                document.querySelector('textarea').value = '';
+                setNotification('Review submitted successfully!', 'success');
+            } catch (error) {
+                setNotification('Review submission failed! ' + error, 'error');
+            }
         }
+
     }
 
     const handleReviewDelete = (reviewId) => async () => {
