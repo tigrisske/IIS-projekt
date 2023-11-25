@@ -105,15 +105,11 @@
         <i>app/Http/Controllers/ReviewController.php</i>: správa hodnotení udalostí
     </li>
 
+    <h3>Databáza</h3>
+    <p>Na inicializaciu databazy sme pouzili zabudovanu funkcionalitu frameworku Laravel, migracie a databazove seedre.</p>
+    <img src="./doc_files/image.png" alt="Database Schema">
 
-
-
-
-    <h3>Databáza</h3><img src="./doc_files/image.png" alt="Database Schema">
     <h2>In¹talácia</h2>
-
-
-
     <h3>Prerekvizity</h3>
     <ul>
         <li>PHP 8.1</li>
@@ -128,7 +124,7 @@
     <ol>
         <li>V koreòovom adresári projektu spustením príkazu <code>composer install</code> nain¹talujeme potrebné balíèky.</li>
         <li>Vytvori» a nakonfiigurova» súbor <code>.env</code> (príklad v .env.example)</li>
-        <li><code>pphp artisan migrate:fresh --seed</code> vytvoríme potrebné tabuµky v databáze a naplníme ich testovacími dátami.</li>
+        <li><code>php artisan migrate:refresh --seed</code> vytvoríme potrebné tabuµky v databáze a naplníme ich testovacími dátami.</li>
         <li><code>php artisan serve</code> spustíme lokálny server.</li>
     </ol>
     <h4>Frontend</h4>
