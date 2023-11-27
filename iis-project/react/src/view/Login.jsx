@@ -37,7 +37,6 @@ export const Login = () => {
             />
             <div className='input'>
                 <button onClick={handleSignIn}>Sign In</button>
-                <button onClick={check}>Verify Login</button>
             </div>
         </div>
     );

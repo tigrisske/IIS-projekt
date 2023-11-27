@@ -119,8 +119,8 @@ export const CreateEvent = () => {
         }));
 
         //debug 
-        console.log(startDate);
-        console.log(endDate);
+        // console.log(startDate);
+        // console.log(endDate);
 
         if (formatedEndDate === formatedStartDate) {
             console.log("same date");
@@ -149,7 +149,7 @@ export const CreateEvent = () => {
         axiosClient
             .post("/createevent", request)
             .then((response) => {
-                console.log("Response:", response);
+                // console.log("Response:", response);
                 setIsError(false);
                 setErrorMessage("Successfully created!");
 
@@ -162,8 +162,8 @@ export const CreateEvent = () => {
                 // setSelectedLocation(null);
             })
             .catch((error) => {
-                console.log("sem sme sa dostali");
-                console.log("Error:", error);
+                // console.log("sem sme sa dostali");
+                // console.log("Error:", error);
                 setIsError(true);
                 setErrorMessage(
                     `Error creating event! ${error.response.data.message}`
